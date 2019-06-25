@@ -1,7 +1,9 @@
-package com.example.ivwing;
+package com.example.ivwing.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.example.ivwing.R;
 
 public class StepActivity extends AppCompatActivity {
 

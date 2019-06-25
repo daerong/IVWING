@@ -1,9 +1,11 @@
-package com.example.ivwing;
+package com.example.ivwing.activity;
 
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.example.ivwing.R;
 
 public class SplashActivity extends AppCompatActivity {
 

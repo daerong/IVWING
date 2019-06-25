@@ -1,16 +1,22 @@
-package com.example.ivwing;
+package com.example.ivwing.activity;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
+import com.example.ivwing.R;
+import com.example.ivwing.adapter.ScheduleAdapter;
+import com.example.ivwing.data.ScheduleData;
 import com.skyhope.weekday.WeekDaySelector;
 import com.skyhope.weekday.callback.WeekItemClickListener;
 import com.skyhope.weekday.data.Holiday;
 import com.skyhope.weekday.model.WeekModel;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,7 +25,10 @@ import devs.mulham.horizontalcalendar.HorizontalCalendar;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
 
 public class CalendarActivity extends AppCompatActivity {
-//    private WeekDaySelector weekDaySelector;
+
+    RecyclerView recyclerView;
+    RecyclerView.Adapter adapter;
+    RecyclerView.LayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,21 +63,26 @@ public class CalendarActivity extends AppCompatActivity {
             }
         });
 
+        recyclerView = findViewById(R.id.recycler_view);
 
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_calendar);
-//
-//        weekDaySelector = findViewById(R.id.weekDaySelector);
-//
-//        Set<Integer> holiday = new HashSet<>();
-//        holiday.add(Holiday.SUNDAY);
-//        weekDaySelector.setHoliday(holiday);
-//
-//        weekDaySelector.setWeekItemClickListener(this);
+        // 리사이클러뷰의 notify()처럼 데이터가 변했을 때 성능을 높일 때 사용한다.
+        recyclerView.setHasFixedSize(true);
+
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+
+
+        String[] textSet1 =  {"09", "11", "13", "16", "17", "09", "11", "13", "16", "17"};
+        String[] textSet2 =  {"00", "00", "00", "00", "00", "00", "00", "00", "00", "00"};
+        String[] textSet3 =  {"진료", "검사", "외래", "진료", "검사", "진료", "검사", "외래", "진료", "검사"};
+        String[] textSet4 =  {"본관 2층 회복실", "본관 3층 정형외과", "본관 1층 신경외과"," 본관 1층 신경내과", "본관 2층 정형외과", "본관 2층 회복실", "본관 3층 정형외과", "본관 1층 신경외과"," 본관 1층 신경내과", "본관 2층 정형외과"};
+        String[] textSet5 =  {"김지영 간호사", "김지영 원장", "이미영 원장", "이미영 원장", "김지영 원장", "김지영 간호사", "김지영 원장", "이미영 원장", "이미영 원장", "김지영 원장"};
+
+        // 어댑터 할당, 어댑터는 기본 어댑터를 확장한 커스텀 어댑터를 사용할 것이다.
+        adapter = new ScheduleAdapter(textSet1, textSet2, textSet3, textSet4, textSet5);
+        recyclerView.setAdapter(adapter);
+
     }
 
-//    @Override
-//    public void onGetItem(WeekModel model) {
-//        Toast.makeText(this, model.getMonth(), Toast.LENGTH_SHORT).show();
-//    }
 }
