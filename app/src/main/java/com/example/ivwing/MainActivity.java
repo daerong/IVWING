@@ -56,9 +56,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplication(), CalendarActivity.class));
-                MainActivity.this.finish(); // 로딩페이지 Activity stack에서 제거
+//                MainActivity.this.finish(); // 로딩페이지 Activity stack에서 제거
             }
         });
+        iv_action.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplication(), InformationActivity.class));
+//                MainActivity.this.finish(); // 로딩페이지 Activity stack에서 제거
+            }
+        });
+        step_action.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplication(), StepActivity.class));
+//                MainActivity.this.finish(); // 로딩페이지 Activity stack에서 제거
+            }
+        });
+
     }
 
     //버튼
@@ -74,6 +89,11 @@ public class MainActivity extends AppCompatActivity {
             slidingPage.setVisibility(View.VISIBLE);
             slidingPage.startAnimation(translateLeftAnim);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        //초반 플래시 화면에서 넘어갈때 뒤로가기 버튼 못누르게 함
     }
 
     //애니메이션 리스너
