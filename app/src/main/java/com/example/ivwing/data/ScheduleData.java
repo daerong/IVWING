@@ -1,21 +1,19 @@
 package com.example.ivwing.data;
 
 public class ScheduleData {
-    public int getHour() {
+    public String getHour() {
         return hour;
     }
 
-    public void setHour(int hour) {
+    public void setHour(String hour) {
         this.hour = hour;
     }
 
-    public int getMinite() {
-        return minite;
+    public String getMin() {
+        return min;
     }
 
-    public void setMinite(int minite) {
-        this.minite = minite;
-    }
+    public void setMin(String min) { this.min = min; }
 
     public String getType() {
         return type;
@@ -41,9 +39,25 @@ public class ScheduleData {
         this.doctor = doctor;
     }
 
-    private int hour;
-    private int minite;
+    private String hour;
+    private String min;
     private String type;
     private String room;
     private String doctor;
+
+    public ScheduleData(){
+        this.hour = "00";
+        this.min = "00";
+        this.type = "미정";
+        this.room = "미정";
+        this.doctor = "미정";
+    }
+
+    public ScheduleData(String h, String m, String t, String r, String d){
+        this.hour = h;
+        this.min = m;
+        this.type = t;
+        this.room = r;
+        this.doctor = d;
+    }
 }

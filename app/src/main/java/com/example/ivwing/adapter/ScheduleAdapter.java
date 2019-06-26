@@ -16,19 +16,13 @@ import java.util.ArrayList;
 
 public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.MyViewHolder> {
     // 이 데이터들을 가지고 각 뷰 홀더에 들어갈 텍스트 뷰에 연결할 것
-    private String[] textSet1;
-    private String[] textSet2;
-    private String[] textSet3;
-    private String[] textSet4;
-    private String[] textSet5;
+    private ScheduleData[] dataSet;
+
+    // 이 데이터들을 가지고 각 뷰 홀더에 들어갈 텍스트 뷰에 연결할 것
 
     // 생성자
-    public ScheduleAdapter(String[] textSet1, String[] textSet2, String[] textSet3, String[] textSet4, String[] textSet5){
-        this.textSet1 = textSet1;
-        this.textSet2 = textSet2;
-        this.textSet3 = textSet3;
-        this.textSet4 = textSet4;
-        this.textSet5 = textSet5;
+    public ScheduleAdapter(ScheduleData[] dataSet){
+        this.dataSet = dataSet;
     }
 
     // 리사이클러뷰에 들어갈 뷰 홀더, 그리고 그 뷰 홀더에 들어갈 아이템들을 지정
@@ -61,17 +55,17 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.MyView
     // 실제 각 뷰 홀더에 데이터를 연결해주는 함수
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
-        myViewHolder.textView1.setText(this.textSet1[i]);
-        myViewHolder.textView2.setText(this.textSet2[i]);
-        myViewHolder.textView3.setText(this.textSet3[i]);
-        myViewHolder.textView4.setText(this.textSet4[i]);
-        myViewHolder.textView5.setText(this.textSet5[i]);
+        myViewHolder.textView1.setText(this.dataSet[i].getHour());
+        myViewHolder.textView2.setText(this.dataSet[i].getMin());
+        myViewHolder.textView3.setText(this.dataSet[i].getType());
+        myViewHolder.textView4.setText(this.dataSet[i].getRoom());
+        myViewHolder.textView5.setText(this.dataSet[i].getDoctor());
     }
 
     // iOS의 numberOfRows, 리사이클러뷰안에 들어갈 뷰 홀더의 개수
     @Override
     public int getItemCount() {
-        return textSet1.length;
+        return dataSet.length;
     }
 }
 
