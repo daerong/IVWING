@@ -32,14 +32,14 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.MyView
     }
 
     // 리사이클러뷰에 들어갈 뷰 홀더, 그리고 그 뷰 홀더에 들어갈 아이템들을 지정
-    public static class MyViewHolder extends  RecyclerView.ViewHolder{
-        public TextView textView1;
-        public TextView textView2;
-        public TextView textView3;
-        public TextView textView4;
-        public TextView textView5;
+    static class MyViewHolder extends  RecyclerView.ViewHolder{
+        TextView textView1;
+        TextView textView2;
+        TextView textView3;
+        TextView textView4;
+        TextView textView5;
 
-        public MyViewHolder(View view){
+        MyViewHolder(View view){
             super(view);
             this.textView1 = view.findViewById(R.id.textView1);
             this.textView2 = view.findViewById(R.id.textView2);
@@ -55,8 +55,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.MyView
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View holderView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.calendar_item, viewGroup, false);
-        MyViewHolder myViewHolder = new MyViewHolder(holderView);
-        return myViewHolder;
+        return new MyViewHolder(holderView);
     }
 
     // 실제 각 뷰 홀더에 데이터를 연결해주는 함수
