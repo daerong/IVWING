@@ -277,12 +277,12 @@
                 android:id="@+id/QR_btn"
                 android:layout_width="152dp"
                 android:layout_height="32dp"
-                android:text="QR 코드 변경"
+                android:text="로그 아웃"
                 android:textColor="#008AFF"
                 android:textStyle="bold"
                 android:textSize="14sp"
                 android:layout_centerHorizontal="true"
-                android:background="@drawable/round_box"
+                android:background="@drawable/button_logout_round4"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="56dp"/>
         </RelativeLayout>

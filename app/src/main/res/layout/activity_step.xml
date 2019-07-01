@@ -73,7 +73,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:gravity="right"
+                    android:gravity="right|center_vertical"
                     android:layout_alignParentBottom="true">
 
                     <TextView
@@ -82,8 +82,16 @@
                         android:text="목표걸음"
                         android:textSize="10sp"
                         android:textColor="#2699FB"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold"
+                        android:layout_marginEnd="8dp"/>
 
+                    <Spinner
+                        android:id="@+id/spinner_field"
+                        android:layout_width="56dp"
+                        android:layout_height="24dp"
+                        android:spinnerMode="dropdown"
+                        android:background="@drawable/spiner_step_btn"
+                        android:textColor="#707070"/>
 
 
                 </LinearLayout>

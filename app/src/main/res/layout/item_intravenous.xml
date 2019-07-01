@@ -52,14 +52,14 @@
                 android:id="@+id/intravenous_outer"
                 android:layout_width="match_parent"
                 android:layout_height="22dp"
-                android:background="@drawable/intravenous_graph"
+                android:background="@drawable/graph_intravenous"
                 android:paddingStart="2dp">
 
                 <RelativeLayout
                     android:id="@+id/intravenous_length"
                     android:layout_width="49dp"
                     android:layout_height="18dp"
-                    android:background="@drawable/intravenous_graph_inner"
+                    android:background="@drawable/graph_intravenous_inner"
                     android:layout_centerVertical="true"
                     android:clipChildren="true">
 

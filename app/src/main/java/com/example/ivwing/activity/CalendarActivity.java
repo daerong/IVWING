@@ -45,7 +45,7 @@ public class CalendarActivity extends AppCompatActivity {
         Calendar endDate = Calendar.getInstance();
         endDate.add(Calendar.MONTH, 1);
 
-        Drawable selected_background = getResources().getDrawable(R.drawable.selected_background, null);
+        Drawable selected_background = getResources().getDrawable(R.drawable.calendar_selected_background, null);
 
         HorizontalCalendar horizontalCalendar = new HorizontalCalendar.Builder(this, R.id.calendarView)
                 .range(startDate, endDate)
