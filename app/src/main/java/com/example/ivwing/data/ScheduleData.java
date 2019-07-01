@@ -46,11 +46,7 @@ public class ScheduleData {
     private String doctor;
 
     public ScheduleData(){
-        this.hour = "00";
-        this.min = "00";
-        this.type = "미정";
-        this.room = "미정";
-        this.doctor = "미정";
+
     }
 
     public ScheduleData(String h, String m, String t, String r, String d){

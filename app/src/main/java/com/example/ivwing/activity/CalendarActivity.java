@@ -6,37 +6,37 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.example.ivwing.R;
 import com.example.ivwing.adapter.ScheduleAdapter;
 import com.example.ivwing.data.ScheduleData;
-import com.skyhope.weekday.WeekDaySelector;
-import com.skyhope.weekday.callback.WeekItemClickListener;
-import com.skyhope.weekday.data.Holiday;
-import com.skyhope.weekday.model.WeekModel;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashSet;
-import java.util.Set;
 
 import devs.mulham.horizontalcalendar.HorizontalCalendar;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
 
 public class CalendarActivity extends AppCompatActivity {
-
+    ImageView backButton;
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
     RecyclerView.LayoutManager layoutManager;
-    ScheduleData[] dataArr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         /* starts before 1 month from now */
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
+
+        backButton = findViewById(R.id.back_btn);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CalendarActivity.this.finish(); // 로딩페이지 Activity stack에서 제거
+            }
+        });
 
         Calendar startDate = Calendar.getInstance();
         startDate.add(Calendar.MONTH, -1);
@@ -64,7 +64,7 @@ public class CalendarActivity extends AppCompatActivity {
             }
         });
 
-        recyclerView = findViewById(R.id.recycler_view);
+        recyclerView = findViewById(R.id.schedule_recyclerView);
 
         // 리사이클러뷰의 notify()처럼 데이터가 변했을 때 성능을 높일 때 사용한다.
         recyclerView.setHasFixedSize(true);

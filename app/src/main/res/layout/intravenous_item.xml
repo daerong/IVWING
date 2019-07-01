@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="176dp"
+    android:background="#F1F9FF"
+    android:orientation="vertical"
+    android:paddingStart="40dp"
+    android:paddingEnd="40dp"
+    android:paddingTop="39dp"
+    android:paddingBottom="41dp"
+    android:gravity="center_vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="96dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentTop="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="수액명칭 : "
+                android:textSize="14sp"
+                android:textColor="#6A6A6A"
+                android:layout_marginEnd="10dp"/>
+            <TextView
+                android:id="@+id/intravenous_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5% 포도당생리식염액"
+                android:textSize="14sp"
+                android:textColor="#6A6A6A"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_centerVertical="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="수액명칭 : "
+                android:textSize="14sp"
+                android:textColor="#6A6A6A"
+                android:layout_marginEnd="10dp"/>
+
+            <RelativeLayout
+                android:id="@+id/intravenous_outer"
+                android:layout_width="match_parent"
+                android:layout_height="22dp"
+                android:background="@drawable/intravenous_graph"
+                android:paddingStart="2dp">
+
+                <RelativeLayout
+                    android:id="@+id/intravenous_length"
+                    android:layout_width="49dp"
+                    android:layout_height="18dp"
+                    android:background="@drawable/intravenous_graph_inner"
+                    android:layout_centerVertical="true"
+                    android:clipChildren="true">
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="6dp"
+                    android:layout_centerVertical="true">
+                    <TextView
+                        android:id="@+id/intravenous_left"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="900"
+                        android:textSize="12sp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="/"
+                        android:textSize="12sp"/>
+                    <TextView
+                        android:id="@+id/intravenous_max"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1000"
+                        android:textSize="12sp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="(mL)"
+                        android:textSize="12sp"/>
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="남은시간 : "
+                    android:textSize="14sp"
+                    android:textColor="#6A6A6A"
+                    android:layout_marginEnd="10dp"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/intravenous_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1500"
+                        android:textSize="14sp"
+                        android:textColor="#6A6A6A"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="분"
+                        android:textSize="14sp"
+                        android:textColor="#6A6A6A"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="투여속도 : "
+                    android:textSize="14sp"
+                    android:textColor="#6A6A6A"
+                    android:layout_marginEnd="10dp"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/intravenous_gtt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="20"
+                        android:textSize="14sp"
+                        android:textColor="#6A6A6A"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="gtt"
+                        android:textSize="14sp"
+                        android:textColor="#6A6A6A"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>
