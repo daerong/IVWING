@@ -93,10 +93,7 @@
                         android:background="@drawable/spiner_step_btn"
                         android:textColor="#707070"/>
 
-
                 </LinearLayout>
-
-
             </RelativeLayout>
 
             <android.support.v7.widget.RecyclerView

@@ -49,7 +49,7 @@ public class IntravenousAdapter extends RecyclerView.Adapter<IntravenousAdapter.
     @NonNull
     @Override
     public IntravenousViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View holderView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_intravenous, viewGroup, false);
+        View holderView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recycler_item_intravenous, viewGroup, false);
         return new IntravenousViewHolder(holderView);
     }
 
