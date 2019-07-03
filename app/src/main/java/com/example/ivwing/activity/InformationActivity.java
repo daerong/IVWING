@@ -1,6 +1,5 @@
 package com.example.ivwing.activity;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,9 +9,7 @@ import android.widget.ImageView;
 
 import com.example.ivwing.R;
 import com.example.ivwing.adapter.IntravenousAdapter;
-import com.example.ivwing.adapter.ScheduleAdapter;
 import com.example.ivwing.data.IntravenousData;
-import com.example.ivwing.data.ScheduleData;
 
 public class InformationActivity extends AppCompatActivity {
     ImageView backButton;

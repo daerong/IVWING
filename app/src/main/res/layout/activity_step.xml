@@ -39,12 +39,13 @@
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:background="#F1F9FF">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="104dp"
+                android:layout_weight="0"
                 android:paddingTop="32dp"
                 android:paddingStart="40dp"
                 android:paddingEnd="24dp">
@@ -99,8 +100,9 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/step_recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layoutManager="LinearLayoutManager"/>
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                app:layoutManager="LinearLayoutManager" />
 
         </LinearLayout>
 
@@ -108,8 +110,7 @@
             android:layout_width="match_parent"
             android:layout_height="168dp"
             android:layout_weight="0"
-            android:orientation="vertical"
-            android:layout_alignParentBottom="true">
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -120,7 +121,7 @@
                     android:layout_width="0dp"
                     android:layout_height="84dp"
                     android:layout_weight="1"
-                    android:paddingLeft="48dp">
+                    android:paddingStart="48dp">
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -145,13 +146,12 @@
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:layout_centerInParent="true"
                     android:background="#C2C2C2"/>
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="84dp"
                     android:layout_weight="1"
-                    android:paddingLeft="48dp">
+                    android:paddingStart="48dp">
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -188,7 +188,6 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_centerInParent="true"
                 android:background="#C2C2C2"/>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -236,7 +235,6 @@
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:layout_centerInParent="true"
                     android:background="#C2C2C2"/>
                 <RelativeLayout
                     android:layout_width="0dp"

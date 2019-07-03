@@ -47,7 +47,7 @@ public class IntravenousData {
     private int time;
     private int gtt;
 
-    public IntravenousData(){
+    public IntravenousData(String s, String s1, int i){
 
     }
 
