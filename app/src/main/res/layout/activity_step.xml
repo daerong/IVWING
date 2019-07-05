@@ -97,13 +97,25 @@
                 </LinearLayout>
             </RelativeLayout>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/step_recyclerView"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
-                android:layout_weight="1"
-                app:layoutManager="LinearLayoutManager" />
+                android:layout_weight="1">
 
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/step_recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layoutManager="LinearLayoutManager" />
+
+                <ImageView
+                    android:id="@+id/dashLine"
+                    android:src="@drawable/drawable_dash_line"
+                    android:layerType="software"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"/>
+
+            </RelativeLayout>
         </LinearLayout>
 
         <LinearLayout

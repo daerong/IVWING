@@ -47,7 +47,15 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepViewHolder
     // 실제 각 뷰 홀더에 데이터를 연결해주는 함수
     @Override
     public void onBindViewHolder(@NonNull StepViewHolder myViewHolder, int i) {
-        float step_height = 822;
+        int step_vol = this.dataSet[i].getStep();
+        float step_height;
+        if(step_vol < 12000){
+            step_height = 1116 * step_vol / 12000;
+        }
+        else{
+            step_height = 1116;
+        }
+
         myViewHolder.recycler_month.setText(this.dataSet[i].getMonth());
         myViewHolder.recycler_day.setText(this.dataSet[i].getDay());
 
