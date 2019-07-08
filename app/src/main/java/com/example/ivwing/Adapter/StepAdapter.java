@@ -1,4 +1,4 @@
-package com.example.ivwing.adapter;
+package com.example.ivwing.Adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -10,7 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.ivwing.R;
-import com.example.ivwing.data.StepData;
+import com.example.ivwing.Data.StepData;
 
 public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepViewHolder> {
     // 이 데이터들을 가지고 각 뷰 홀더에 들어갈 텍스트 뷰에 연결할 것

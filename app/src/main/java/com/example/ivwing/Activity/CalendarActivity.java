@@ -1,4 +1,4 @@
-package com.example.ivwing.activity;
+package com.example.ivwing.Activity;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -10,8 +10,8 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.example.ivwing.R;
-import com.example.ivwing.adapter.ScheduleAdapter;
-import com.example.ivwing.data.ScheduleData;
+import com.example.ivwing.Adapter.ScheduleAdapter;
+import com.example.ivwing.Data.ScheduleData;
 
 import java.util.Calendar;
 

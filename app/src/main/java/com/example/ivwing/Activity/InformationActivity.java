@@ -1,4 +1,4 @@
-package com.example.ivwing.activity;
+package com.example.ivwing.Activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,8 +8,8 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.example.ivwing.R;
-import com.example.ivwing.adapter.IntravenousAdapter;
-import com.example.ivwing.data.IntravenousData;
+import com.example.ivwing.Adapter.IntravenousAdapter;
+import com.example.ivwing.Data.IntravenousData;
 
 public class InformationActivity extends AppCompatActivity {
     ImageView backButton;

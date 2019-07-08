@@ -1,4 +1,4 @@
-package com.example.ivwing.activity;
+package com.example.ivwing.Activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,8 +14,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.example.ivwing.R;
-import com.example.ivwing.adapter.StepAdapter;
-import com.example.ivwing.data.StepData;
+import com.example.ivwing.Adapter.StepAdapter;
+import com.example.ivwing.Data.StepData;
 
 public class StepActivity extends AppCompatActivity implements View.OnTouchListener{
     ImageView backButton;

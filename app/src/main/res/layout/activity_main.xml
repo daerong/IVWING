@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.MainActivity">
+    tools:context=".Activity.MainActivity">
 
     <LinearLayout android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -255,26 +255,8 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_above="@+id/QR_btn"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="28dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="홍길동님이 아니시면,\nQR코드를 변경하세요."
-                    android:textSize="10sp"
-                    android:lineHeight="20dp"
-                    android:textColor="#FFFFFF"/>
-
-            </LinearLayout>
-
             <Button
-                android:id="@+id/QR_btn"
+                android:id="@+id/logout_btn"
                 android:layout_width="152dp"
                 android:layout_height="32dp"
                 android:text="로그 아웃"

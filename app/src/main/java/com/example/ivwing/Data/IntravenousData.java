@@ -1,4 +1,4 @@
-package com.example.ivwing.data;
+package com.example.ivwing.Data;
 
 public class IntravenousData {
     public String getName() {

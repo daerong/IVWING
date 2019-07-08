@@ -1,4 +1,4 @@
-package com.example.ivwing.activity;
+package com.example.ivwing.Activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -28,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout calendar_action;
     LinearLayout iv_action;
     LinearLayout step_action;
+
+    Button logout_action;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +75,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 startActivity(new Intent(getApplication(), StepActivity.class));
 //                MainActivity.this.finish(); // 로딩페이지 Activity stack에서 제거
+            }
+        });
+
+        logout_action = findViewById(R.id.logout_btn);
+        logout_action.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplication(), LoginActivity.class)); //로딩이 끝난 후, ChoiceFunction 이동
+                MainActivity.this.finish(); // 로딩페이지 Activity stack에서 제거
             }
         });
 

@@ -1,6 +1,4 @@
-package com.example.ivwing.data;
-
-import java.util.Date;
+package com.example.ivwing.Data;
 
 public class StepData {
     public String getMonth() {

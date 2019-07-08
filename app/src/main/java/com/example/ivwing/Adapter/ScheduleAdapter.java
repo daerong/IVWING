@@ -1,4 +1,4 @@
-package com.example.ivwing.adapter;
+package com.example.ivwing.Adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.ivwing.R;
-import com.example.ivwing.data.ScheduleData;
+import com.example.ivwing.Data.ScheduleData;
 
 public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ScheduleViewHolder> {
     // 이 데이터들을 가지고 각 뷰 홀더에 들어갈 텍스트 뷰에 연결할 것

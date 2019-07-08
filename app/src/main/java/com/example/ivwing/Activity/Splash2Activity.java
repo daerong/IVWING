@@ -1,4 +1,4 @@
-package com.example.ivwing.activity;
+package com.example.ivwing.Activity;
 
 import android.content.Intent;
 import android.os.Handler;
