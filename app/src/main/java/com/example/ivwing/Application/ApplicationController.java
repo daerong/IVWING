@@ -1,24 +1,33 @@
 package com.example.ivwing.Application;
 
+import com.example.ivwing.Network.NetworkService;
+
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApplicationController {
-    private static ApplicationController ourInstance = new ApplicationController();
+    private static final ApplicationController ourInstance = new ApplicationController();
+
     public static ApplicationController getInstance() {
         return ourInstance;
     }
+
     private ApplicationController() {
     }
 
-    private Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("https://api.github.com/")
+
+    private Retrofit retrofit = new Retrofit.Builder() // retrofit builder
+            .baseUrl("http://localhost:3000/")
             .addConverterFactory(GsonConverterFactory.create()) // 파싱등록
             .build();
 
-    private ApplicationController service = retrofit.create(ApplicationController.class);
+    private NetworkService networkService; // Interface container
 
-    public ApplicationController getService() {
-        return service;
+    public NetworkService getMemberFactoryIm(){ // Interface 객체
+        if(networkService == null){
+            networkService = retrofit.create(NetworkService.class);
+        }
+
+        return networkService;
     }
 }
