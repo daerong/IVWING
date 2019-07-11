@@ -53,6 +53,25 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+            // 이메일 입력 확인
+            if( login_email.getText().toString().length() == 0 ) {
+                Toast.makeText(LoginActivity.this, "이메일을 입력하세요!", Toast.LENGTH_SHORT).show();
+                login_email.requestFocus();
+                return;
+            }else if(!android.util.Patterns.EMAIL_ADDRESS.matcher(login_email.getText().toString()).matches()){
+                Toast.makeText(LoginActivity.this,"이메일 형식이 아닙니다", Toast.LENGTH_SHORT).show();
+                login_email.setText(null);
+                login_email.requestFocus();
+                return;
+            }
+
+            // 비밀번호 입력 확인
+            if( login_pwd.getText().toString().length() == 0 ) {
+                Toast.makeText(LoginActivity.this, "비밀번호를 입력하세요!", Toast.LENGTH_SHORT).show();
+                login_pwd.requestFocus();
+                return;
+            }
+
             HashMap<String, Object> input = new HashMap<>();
             input.put("user_email", login_email.getText().toString());
             input.put("user_pwd", login_pwd.getText().toString());
