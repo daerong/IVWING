@@ -34,15 +34,16 @@
                 android:background="@drawable/under_line_input_box">
 
                 <EditText
+                    android:id="@+id/login_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="36dp"
                     android:background="@null"
                     android:hint="이메일"
-                    android:textColorHint="#6A6A6A"
-                    android:text="xogud3125@naver.com"
+                    android:textColorHint="#C2C2C2"
                     android:textColor="#6A6A6A"
                     android:textSize="14sp"
+                    android:singleLine="true"
                     android:textCursorDrawable="@null"
                     android:layout_centerVertical="true"/>
 
@@ -55,16 +56,17 @@
                 android:background="@drawable/under_line_input_box">
 
                 <EditText
+                    android:id="@+id/login_pwd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="36dp"
                     android:background="@null"
                     android:inputType="textPassword"
                     android:hint="비밀번호"
-                    android:textColorHint="#6A6A6A"
-                    android:text="12345678"
+                    android:textColorHint="#C2C2C2"
                     android:textColor="#6A6A6A"
                     android:textSize="14sp"
+                    android:singleLine="true"
                     android:textCursorDrawable="@null"
                     android:layout_centerVertical="true"/>
             </RelativeLayout>
