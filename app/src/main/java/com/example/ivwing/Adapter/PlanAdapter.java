@@ -10,16 +10,16 @@ import android.widget.TextView;
 import com.example.ivwing.R;
 import com.example.ivwing.Data.ScheduleData;
 
-public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ScheduleViewHolder> {
+public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.PlanViewHolder> {
     // 이 데이터들을 가지고 각 뷰 홀더에 들어갈 텍스트 뷰에 연결할 것
     private ScheduleData[] dataSet;
     // 생성자
-    public ScheduleAdapter(ScheduleData[] dataSet){
+    public PlanAdapter(ScheduleData[] dataSet){
         this.dataSet = dataSet;
     }
 
     // 리사이클러뷰에 들어갈 뷰 홀더, 그리고 그 뷰 홀더에 들어갈 아이템들을 지정
-    static class ScheduleViewHolder extends  RecyclerView.ViewHolder{
+    static class PlanViewHolder extends  RecyclerView.ViewHolder{
         // 이 데이터들을 가지고 각 뷰 홀더에 들어갈 텍스트 뷰에 연결할 것
         TextView textView1;
         TextView textView2;
@@ -27,7 +27,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
         TextView textView4;
         TextView textView5;
 
-        ScheduleViewHolder(View view){
+        PlanViewHolder(View view){
             super(view);
             this.textView1 = view.findViewById(R.id.textView1);
             this.textView2 = view.findViewById(R.id.textView2);
@@ -41,14 +41,14 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
     // 리사이클러뷰에 들어갈 뷰 홀더를 할당하는 함수, 뷰 홀더는 실제 레이아웃 파일과 매핑되어야하며, extends의 Adater<>에서 <>안에들어가는 타입을 따른다.
     @NonNull
     @Override
-    public ScheduleViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View holderView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recycler_item_schedule, viewGroup, false);
-        return new ScheduleViewHolder(holderView);
+    public PlanViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View holderView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recycler_item_plan, viewGroup, false);
+        return new PlanViewHolder(holderView);
     }
 
     // 실제 각 뷰 홀더에 데이터를 연결해주는 함수
     @Override
-    public void onBindViewHolder(@NonNull ScheduleViewHolder myViewHolder, int i) {
+    public void onBindViewHolder(@NonNull PlanViewHolder myViewHolder, int i) {
         myViewHolder.textView1.setText(this.dataSet[i].getHour());
         myViewHolder.textView2.setText(this.dataSet[i].getMin());
         myViewHolder.textView3.setText(this.dataSet[i].getType());

@@ -97,7 +97,7 @@ public class StepActivity extends AppCompatActivity implements View.OnTouchListe
 
         // 어댑터 할당, 어댑터는 기본 어댑터를 확장한 커스텀 어댑터를 사용할 것이다.
         adapter = new StepAdapter(dataArr);
-//        adapter = new ScheduleAdapter(textSet1, textSet2, textSet3, textSet4, textSet5);
+//        adapter = new PlanAdapter(textSet1, textSet2, textSet3, textSet4, textSet5);
         recyclerView.setAdapter(adapter);
 
     }

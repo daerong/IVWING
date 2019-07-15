@@ -45,7 +45,7 @@ public class ScheduleData {
     private String room;
     private String doctor;
 
-    public ScheduleData(){
+    public ScheduleData(int arr_vol){
 
     }
 
