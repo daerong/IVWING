@@ -2,6 +2,7 @@ package com.example.ivwing.Network;
 
 import com.example.ivwing.Data.LoginResult;
 import com.example.ivwing.Data.PlanResult;
+import com.example.ivwing.Data.RecordResult;
 import com.example.ivwing.Data.SigninResult;
 
 import java.util.HashMap;
@@ -27,6 +28,10 @@ public interface NetworkService {
     @FormUrlEncoded
     @POST("plan/search")
     Call<PlanResult> postSearchPlan(@FieldMap HashMap<String, Object> param);
+
+    @FormUrlEncoded
+    @POST("record/search")
+    Call<RecordResult> postSearchRecord(@FieldMap HashMap<String, Integer> param);
 
 //    @POST("user/signup")
 //    Call<ResponseBody> postSignup(@Body JsonObject jsonObject);

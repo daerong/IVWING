@@ -44,8 +44,6 @@ public class CalendarActivity extends AppCompatActivity {
     Retrofit retrofit;
     NetworkService networkService;
 
-    int arr_vol;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         /* starts before 1 month from now */
