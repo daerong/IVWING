@@ -4,6 +4,7 @@ import com.example.ivwing.Data.LoginResult;
 import com.example.ivwing.Data.PlanResult;
 import com.example.ivwing.Data.RecordResult;
 import com.example.ivwing.Data.SigninResult;
+import com.example.ivwing.Data.StepResult;
 
 import java.util.HashMap;
 
@@ -32,6 +33,10 @@ public interface NetworkService {
     @FormUrlEncoded
     @POST("record/search")
     Call<RecordResult> postSearchRecord(@FieldMap HashMap<String, Integer> param);
+
+    @FormUrlEncoded
+    @POST("step/search")
+    Call<StepResult> postSearchStep(@FieldMap HashMap<String, Object> param);
 
 //    @POST("user/signup")
 //    Call<ResponseBody> postSignup(@Body JsonObject jsonObject);

@@ -1,6 +1,6 @@
 package com.example.ivwing.Data;
 
-public class StepData {
+public class PamperData {
     public String getMonth() {
         return month;
     }
@@ -30,11 +30,11 @@ public class StepData {
     int step;
 
 
-    public StepData(){
+    public PamperData(){
 
     }
 
-    public StepData(String month, String day, int step){
+    public PamperData(String month, String day, int step){
         this.month = month;
         this.day = day;
         this.step = step;

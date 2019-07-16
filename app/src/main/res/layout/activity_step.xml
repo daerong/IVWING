@@ -140,9 +140,10 @@
                         android:orientation="vertical"
                         android:layout_centerVertical="true">
                         <TextView
+                            android:id="@+id/step_volume"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="4000"
+                            android:text="0"
                             android:textSize="21sp"
                             android:textColor="#2699FB"
                             android:textStyle="bold"/>
@@ -174,9 +175,10 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
                             <TextView
+                                android:id="@+id/step_minite"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="30"
+                                android:text="0.0"
                                 android:textSize="21sp"
                                 android:textColor="#2699FB"
                                 android:textStyle="bold"/>
@@ -221,9 +223,10 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
                             <TextView
+                                android:id="@+id/step_distance"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0.87"
+                                android:text="0.00"
                                 android:textSize="21sp"
                                 android:textColor="#2699FB"
                                 android:textStyle="bold"/>
@@ -263,9 +266,10 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
                             <TextView
+                                android:id="@+id/step_calorie"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="232"
+                                android:text="0.0"
                                 android:textSize="21sp"
                                 android:textColor="#2699FB"
                                 android:textStyle="bold"/>

@@ -12,18 +12,44 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.ivwing.Adapter.IntravenousAdapter;
+import com.example.ivwing.Data.IntravenousData;
+import com.example.ivwing.Data.RecordResult;
+import com.example.ivwing.Data.StepResult;
+import com.example.ivwing.Network.NetworkService;
 import com.example.ivwing.R;
 import com.example.ivwing.Adapter.StepAdapter;
-import com.example.ivwing.Data.StepData;
+import com.example.ivwing.Data.PamperData;
+
+import java.text.DecimalFormat;
+import java.util.HashMap;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class StepActivity extends AppCompatActivity implements View.OnTouchListener{
     ImageView backButton;
+    TextView stepVolume;
+    TextView stepMinite;
+    TextView stepDistance;
+    TextView stepCalorie;
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
     RecyclerView.LayoutManager layoutManager;
     ImageView dashLine;
     Spinner spinner;
+
+    Retrofit retrofit;
+    NetworkService networkService;
+
+    public static void RecyclerClickEvent() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +58,11 @@ public class StepActivity extends AppCompatActivity implements View.OnTouchListe
 
         dashLine = (ImageView)findViewById(R.id.dashLine);
         dashLine.setOnTouchListener(this);
+
+        stepVolume = findViewById(R.id.step_volume);
+        stepMinite = findViewById(R.id.step_minite);
+        stepDistance = findViewById(R.id.step_distance);
+        stepCalorie = findViewById(R.id.step_calorie);
 
         backButton = findViewById(R.id.back_btn);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -84,22 +115,62 @@ public class StepActivity extends AppCompatActivity implements View.OnTouchListe
         ((LinearLayoutManager) layoutManager).setStackFromEnd(true);
         recyclerView.setLayoutManager(layoutManager);
 
-        String[] monthSet =  {"06", "06", "06", "06", "06", "07", "07", "07", "07", "07", "07", "07", "07", "07", "07"};
-        String[] daySet =  {"26", "27", "28", "29", "30", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10"};
-        int[] stepSet =  {12000, 11000, 10000, 9000, 8000, 7000, 6000, 5000, 4000, 3000, 2000, 1000, 0, 1000, 12000};
+        retrofit = new Retrofit.Builder()
+                .baseUrl(NetworkService.API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        networkService = retrofit.create(NetworkService.class);
 
-        StepData[] dataArr = new StepData[15];
+        HashMap<String, Object> input = new HashMap<>();
+        input.put("user_id", 1);
 
-        for(int i = 0; i < stepSet.length; i++){
-            StepData sample = new StepData(monthSet[i], daySet[i], stepSet[i]);
-            dataArr[i] = sample;
-        }
+        Call<StepResult> comment = networkService.postSearchStep(input);
+        comment.enqueue(new Callback<StepResult>() {
+            @Override
+            public void onResponse(Call<StepResult> call, Response<StepResult> response) {
+                if(response.isSuccessful()){
+                    if(response.body().getStatus().equals("Success")){
+                        if(response.body().getMsg().equals("Empty data")){
+                            recyclerView.setAdapter(null);
 
-        // 어댑터 할당, 어댑터는 기본 어댑터를 확장한 커스텀 어댑터를 사용할 것이다.
-        adapter = new StepAdapter(dataArr);
-//        adapter = new PlanAdapter(textSet1, textSet2, textSet3, textSet4, textSet5);
-        recyclerView.setAdapter(adapter);
+                            recyclerView.setLayoutManager(layoutManager);
+                            Toast.makeText(StepActivity.this, "표시할 데이터가 없습니다.", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Log.v("Count", String.valueOf(response.body().getData().size()));
 
+                            int arr_vol = response.body().getData().size();
+
+                            StepResult stepResult = response.body();
+                            StepResult.StepData[] stepData = new StepResult.StepData[arr_vol];
+
+                            stepResult.copy(stepData, arr_vol);
+
+                            PamperData[] dataArr = new PamperData[arr_vol];
+
+                            for(int i = 0; i < arr_vol; i++){
+                                PamperData sample = new PamperData(stepData[i].getStep_date().substring(5, 7), stepData[i].getStep_date().substring(8, 10), stepData[i].getStep_vol());
+                                dataArr[i] = sample;
+                            }
+
+                            // 어댑터 할당, 어댑터는 기본 어댑터를 확장한 커스텀 어댑터를 사용할 것이다.
+                            adapter = new StepAdapter(dataArr, StepActivity.this);
+                            recyclerView.setAdapter(adapter);
+
+                            recyclerView.setLayoutManager(layoutManager);
+                        }
+                    }else{
+                        Toast.makeText(StepActivity.this, "Failure", Toast.LENGTH_SHORT).show();
+                    }
+                } else{
+                    Toast.makeText(StepActivity.this, "통신 실패", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<StepResult> call, Throwable t) {
+                Toast.makeText(StepActivity.this, "네트워크가 원할하지 않습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     float oldYvalue;
@@ -181,5 +252,17 @@ public class StepActivity extends AppCompatActivity implements View.OnTouchListe
 
         }
         return true;
+    }
+
+    public void RecyclerClickEvent(int vol){
+
+        double calorie = vol / 30.0;
+        double distance = 0.0007 * vol;
+        double minite = 0.00858 * vol;
+
+        stepVolume.setText(String.valueOf(vol));
+        stepMinite.setText(new DecimalFormat("#.#").format(minite));
+        stepDistance.setText(new DecimalFormat("#.##").format(distance));
+        stepCalorie.setText(new DecimalFormat("#.#").format(calorie));
     }
 }

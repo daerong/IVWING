@@ -1,5 +1,6 @@
 package com.example.ivwing.Adapter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,16 +9,21 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.ivwing.Activity.StepActivity;
 import com.example.ivwing.R;
-import com.example.ivwing.Data.StepData;
+import com.example.ivwing.Data.PamperData;
 
 public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepViewHolder> {
     // 이 데이터들을 가지고 각 뷰 홀더에 들어갈 텍스트 뷰에 연결할 것
-    private StepData[] dataSet;
+    private PamperData[] dataSet;
+    private Context mContext = null;
+    private View lastSelect = null;
     // 생성자
-    public StepAdapter(StepData[] dataSet){
+    public StepAdapter(PamperData[] dataSet, Context context){
         this.dataSet = dataSet;
+        this.mContext = context;
     }
 
     // 리사이클러뷰에 들어갈 뷰 홀더, 그리고 그 뷰 홀더에 들어갈 아이템들을 지정
@@ -47,7 +53,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepViewHolder
     // 실제 각 뷰 홀더에 데이터를 연결해주는 함수
     @Override
     public void onBindViewHolder(@NonNull StepViewHolder myViewHolder, int i) {
-        int step_vol = this.dataSet[i].getStep();
+        final int step_vol = this.dataSet[i].getStep();
         float step_height;
         if(step_vol < 12000){
             step_height = 1116 * step_vol / 12000;
@@ -63,6 +69,20 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepViewHolder
         length_lp.height = Math.round(step_height);
         myViewHolder.recycler_graph.setLayoutParams(length_lp);
         myViewHolder.recycler_graph.requestLayout();
+
+        myViewHolder.recycler_graph.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Context context = view.getContext();
+//                Toast.makeText(context, step_vol+"", Toast.LENGTH_LONG).show();
+                if(lastSelect != null) lastSelect.setBackgroundColor(mContext.getResources().getColor(R.color.stepOffClick));
+
+                ((StepActivity) mContext).RecyclerClickEvent(step_vol);
+                view.setBackgroundColor(mContext.getResources().getColor(R.color.stepOnClick));
+
+                lastSelect = view;
+            }
+        });
     }
 
     // iOS의 numberOfRows, 리사이클러뷰안에 들어갈 뷰 홀더의 개수

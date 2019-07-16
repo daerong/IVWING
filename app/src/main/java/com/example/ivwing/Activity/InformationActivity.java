@@ -49,6 +49,7 @@ public class InformationActivity extends AppCompatActivity {
                 InformationActivity.this.finish(); // 로딩페이지 Activity stack에서 제거
             }
         });
+
         recyclerView = findViewById(R.id.intravenous_recyclerView);
 
         // 리사이클러뷰의 notify()처럼 데이터가 변했을 때 성능을 높일 때 사용한다.
