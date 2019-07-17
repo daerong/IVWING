@@ -222,7 +222,7 @@
                 android:id="@+id/user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="홍길동 님"
+                android:text="홍길동(28) 님"
                 android:textStyle="bold"
                 android:textSize="14sp"
                 android:textColor="#FFFFFF"
@@ -239,9 +239,37 @@
                 android:layout_marginTop="16dp">
 
                 <TextView
+                    android:id="@+id/user_stat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="입원 시작 날짜 : 2019년 4월 28일"
+                    android:text="상태 : "
+                    android:textSize="10sp"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginBottom="10dp"/>
+
+                <TextView
+                    android:id="@+id/user_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="이메일 : "
+                    android:textSize="10sp"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginBottom="10dp"/>
+
+                <TextView
+                    android:id="@+id/user_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="연락처 : "
+                    android:textSize="10sp"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginBottom="10dp"/>
+
+                <TextView
+                    android:id="@+id/user_linker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="링거대 : "
                     android:textSize="10sp"
                     android:textColor="#FFFFFF"
                     android:layout_marginBottom="10dp"/>
@@ -249,9 +277,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="병실 호수 : 암센터 804호"
+                    android:text="입원 시작 날짜 : 2019년 4월 28일"
                     android:textSize="10sp"
-                    android:textColor="#FFFFFF"/>
+                    android:textColor="#FFFFFF"
+                    android:layout_marginBottom="10dp"/>
 
             </LinearLayout>
 

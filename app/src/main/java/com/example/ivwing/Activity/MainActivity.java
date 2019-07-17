@@ -3,16 +3,25 @@ package com.example.ivwing.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.ivwing.InnerDB.UserVO;
 import com.example.ivwing.R;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
+
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = MainActivity.class.getSimpleName();
+    private Realm mRealm;
 
     //슬라이드 열기/닫기 플래그
     boolean isPageOpen = false;
@@ -32,10 +41,60 @@ public class MainActivity extends AppCompatActivity {
 
     Button logout_action;
 
+    TextView user_name;
+    TextView user_stat;
+    TextView user_email;
+    TextView user_phone;
+    TextView user_linker;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Realm.init(this);
+        mRealm = Realm.getDefaultInstance();
+
+        RealmResults<UserVO> userList = getUserList();
+        Log.i(TAG, ">>>>>   userList.size :  " + userList.size());
+
+        user_name = findViewById(R.id.user_name);
+        user_stat = findViewById(R.id.user_stat);
+        user_email = findViewById(R.id.user_email);
+        user_phone = findViewById(R.id.user_phone);
+        user_linker = findViewById(R.id.user_linker);
+
+        if(userList.size() != 0){
+            user_name.setText(userList.get(0).getUser_name() + "(" + userList.get(0).getUser_age() + ") 님");
+            switch (userList.get(0).getUser_stat()){
+                case "A" : {
+                    user_stat.setText("상태 : 관리자");
+                    break;
+                }
+                case "O" : {
+                    user_stat.setText("상태 : 입원중이 아님");
+                    break;
+                }
+                case "I" : {
+                    user_stat.setText("상태 : " + userList.get(0).getUser_room() + "호에 입원중");
+                    break;
+                }
+                default : {
+                    user_stat.setText("상태 : 입원중이 아님");
+                }
+            }
+            user_email.setText("이메일 : " + userList.get(0).getUser_email());
+            user_phone.setText("연락처 : " + userList.get(0).getUser_phone());
+
+            if(userList.get(0).getUser_linker() == 0){
+                user_linker.setText("링거대 : 사용중이 아님");
+            }else{
+                user_linker.setText("링거대 : " + userList.get(0).getUser_linker() + "번 사용중");
+            }
+        }else{
+            Toast.makeText(MainActivity.this, "Failed : DB error", Toast.LENGTH_SHORT).show();
+        }
 
         //UI
         slidingPage = (LinearLayout)findViewById(R.id.slidingPage);
@@ -59,22 +118,28 @@ public class MainActivity extends AppCompatActivity {
         calendar_action.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplication(), CalendarActivity.class));
-//                MainActivity.this.finish(); // 로딩페이지 Activity stack에서 제거
+                if(!isPageOpen){
+                    startActivity(new Intent(getApplication(), CalendarActivity.class));
+//                  MainActivity.this.finish(); // 로딩페이지 Activity stack에서 제거
+                }
             }
         });
         iv_action.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplication(), InformationActivity.class));
-//                MainActivity.this.finish(); // 로딩페이지 Activity stack에서 제거
+                if(!isPageOpen){
+                    startActivity(new Intent(getApplication(), InformationActivity.class));
+//                  MainActivity.this.finish(); // 로딩페이지 Activity stack에서 제거
+                }
             }
         });
         step_action.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplication(), StepActivity.class));
-//                MainActivity.this.finish(); // 로딩페이지 Activity stack에서 제거
+                if(!isPageOpen){
+                    startActivity(new Intent(getApplication(), StepActivity.class));
+//                  MainActivity.this.finish(); // 로딩페이지 Activity stack에서 제거
+                }
             }
         });
 
@@ -133,5 +198,16 @@ public class MainActivity extends AppCompatActivity {
         public void onAnimationStart(Animation animation) {
 
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mRealm.removeAllChangeListeners();
+        mRealm.close();
+    }
+
+    private RealmResults<UserVO> getUserList(){
+        return mRealm.where(UserVO.class).findAll();
     }
 }

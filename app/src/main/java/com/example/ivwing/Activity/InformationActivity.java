@@ -15,6 +15,7 @@ import com.example.ivwing.Data.LoginResult;
 import com.example.ivwing.Data.PlanResult;
 import com.example.ivwing.Data.RecordResult;
 import com.example.ivwing.Data.ScheduleData;
+import com.example.ivwing.InnerDB.UserVO;
 import com.example.ivwing.Network.NetworkService;
 import com.example.ivwing.R;
 import com.example.ivwing.Adapter.IntravenousAdapter;
@@ -22,6 +23,8 @@ import com.example.ivwing.Data.IntravenousData;
 
 import java.util.HashMap;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -29,6 +32,9 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class InformationActivity extends AppCompatActivity {
+    private static final String TAG = InformationActivity.class.getSimpleName();
+    private Realm mRealm;
+
     ImageView backButton;
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
@@ -41,6 +47,12 @@ public class InformationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_information);
+
+        Realm.init(this);
+        mRealm = Realm.getDefaultInstance();
+
+        RealmResults<UserVO> userList = getUserList();
+        Log.i(TAG, ">>>>>   userList.size :  " + userList.size());
 
         backButton = findViewById(R.id.back_btn);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -64,58 +76,73 @@ public class InformationActivity extends AppCompatActivity {
                 .build();
         networkService = retrofit.create(NetworkService.class);
 
-        HashMap<String, Integer> input = new HashMap<>();
-        input.put("user_id", 1);
+        if(userList.size() != 0){
+            HashMap<String, Integer> input = new HashMap<>();
+            input.put("user_id", userList.get(0).getUser_id());
 
-        Call<RecordResult> comment = networkService.postSearchRecord(input);
-        comment.enqueue(new Callback<RecordResult>() {
-            @Override
-            public void onResponse(Call<RecordResult> call, Response<RecordResult> response) {
-                if(response.isSuccessful()){
-                    if(response.body().getStatus().equals("Success")){
-                        if(response.body().getMsg().equals("Empty data")){
-                            recyclerView.setAdapter(null);
+            Call<RecordResult> comment = networkService.postSearchRecord(input);
+            comment.enqueue(new Callback<RecordResult>() {
+                @Override
+                public void onResponse(Call<RecordResult> call, Response<RecordResult> response) {
+                    if(response.isSuccessful()){
+                        if(response.body().getStatus().equals("Success")){
+                            if(response.body().getMsg().equals("Empty data")){
+                                recyclerView.setAdapter(null);
 
-                            recyclerView.setLayoutManager(layoutManager);
-                            Toast.makeText(InformationActivity.this, "표시할 데이터가 없습니다.", Toast.LENGTH_SHORT).show();
-                        }else{
+                                recyclerView.setLayoutManager(layoutManager);
+                                Toast.makeText(InformationActivity.this, "표시할 데이터가 없습니다.", Toast.LENGTH_SHORT).show();
+                            }else{
 //                                    Toast.makeText(CalendarActivity.this, "Success", Toast.LENGTH_SHORT).show();
 
-                            Log.v("Count", String.valueOf(response.body().getData().size()));
+                                Log.v("Count", String.valueOf(response.body().getData().size()));
 
-                            int arr_vol = response.body().getData().size();
+                                int arr_vol = response.body().getData().size();
 
-                            RecordResult recordResult = response.body();
-                            RecordResult.RecordData[] recordData = new RecordResult.RecordData[arr_vol];
+                                RecordResult recordResult = response.body();
+                                RecordResult.RecordData[] recordData = new RecordResult.RecordData[arr_vol];
 
-                            recordResult.copy(recordData, arr_vol);
+                                recordResult.copy(recordData, arr_vol);
 
 
-                            IntravenousData[] dataArr = new IntravenousData[arr_vol];
+                                IntravenousData[] dataArr = new IntravenousData[arr_vol];
 
-                            for(int i = 0; i < arr_vol; i++){
-                                IntravenousData sample = new IntravenousData(recordData[i].getIv_name(), recordData[i].getIv_now(), recordData[i].getIv_max(), recordData[i].getIv_time(), recordData[i].getRecord_gtt());
-                                dataArr[i] = sample;
+                                for(int i = 0; i < arr_vol; i++){
+                                    IntravenousData sample = new IntravenousData(recordData[i].getIv_name(), recordData[i].getIv_now(), recordData[i].getIv_max(), recordData[i].getIv_time(), recordData[i].getRecord_gtt());
+                                    dataArr[i] = sample;
+                                }
+
+                                // 어댑터 할당, 어댑터는 기본 어댑터를 확장한 커스텀 어댑터를 사용할 것이다.
+                                adapter = new IntravenousAdapter(dataArr);
+                                recyclerView.setAdapter(adapter);
+
+                                recyclerView.setLayoutManager(layoutManager);
                             }
-
-                            // 어댑터 할당, 어댑터는 기본 어댑터를 확장한 커스텀 어댑터를 사용할 것이다.
-                            adapter = new IntravenousAdapter(dataArr);
-                            recyclerView.setAdapter(adapter);
-
-                            recyclerView.setLayoutManager(layoutManager);
+                        }else{
+                            Toast.makeText(InformationActivity.this, "Failure", Toast.LENGTH_SHORT).show();
                         }
-                    }else{
-                        Toast.makeText(InformationActivity.this, "Failure", Toast.LENGTH_SHORT).show();
+                    } else{
+                        Toast.makeText(InformationActivity.this, "통신 실패", Toast.LENGTH_SHORT).show();
                     }
-                } else{
-                    Toast.makeText(InformationActivity.this, "통신 실패", Toast.LENGTH_SHORT).show();
                 }
-            }
 
-            @Override
-            public void onFailure(Call<RecordResult> call, Throwable t) {
-                Toast.makeText(InformationActivity.this, "네트워크가 원할하지 않습니다.", Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<RecordResult> call, Throwable t) {
+                    Toast.makeText(InformationActivity.this, "네트워크가 원할하지 않습니다.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }else{
+            Toast.makeText(InformationActivity.this, "Failed : DB error", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mRealm.removeAllChangeListeners();
+        mRealm.close();
+    }
+
+    private RealmResults<UserVO> getUserList(){
+        return mRealm.where(UserVO.class).findAll();
     }
 }

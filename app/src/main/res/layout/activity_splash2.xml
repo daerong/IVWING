@@ -8,9 +8,11 @@
     tools:context=".Activity.Splash2Activity"
     android:background="#51ADFB">
 
-    <TextView android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/welcome_text"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="유대성님, 안녕하세요."
+        android:text=""
         android:layout_centerInParent="true"
         android:textSize="14sp"
         android:textColor="#ffffff"/>

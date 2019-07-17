@@ -19,6 +19,7 @@ import com.example.ivwing.Adapter.IntravenousAdapter;
 import com.example.ivwing.Data.IntravenousData;
 import com.example.ivwing.Data.RecordResult;
 import com.example.ivwing.Data.StepResult;
+import com.example.ivwing.InnerDB.UserVO;
 import com.example.ivwing.Network.NetworkService;
 import com.example.ivwing.R;
 import com.example.ivwing.Adapter.StepAdapter;
@@ -27,6 +28,8 @@ import com.example.ivwing.Data.PamperData;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,6 +37,9 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class StepActivity extends AppCompatActivity implements View.OnTouchListener{
+    private static final String TAG = InformationActivity.class.getSimpleName();
+    private Realm mRealm;
+
     ImageView backButton;
     TextView stepVolume;
     TextView stepMinite;
@@ -48,13 +54,16 @@ public class StepActivity extends AppCompatActivity implements View.OnTouchListe
     Retrofit retrofit;
     NetworkService networkService;
 
-    public static void RecyclerClickEvent() {
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step);
+
+        Realm.init(this);
+        mRealm = Realm.getDefaultInstance();
+
+        RealmResults<UserVO> userList = getUserList();
+        Log.i(TAG, ">>>>>   userList.size :  " + userList.size());
 
         dashLine = (ImageView)findViewById(R.id.dashLine);
         dashLine.setOnTouchListener(this);
@@ -121,56 +130,60 @@ public class StepActivity extends AppCompatActivity implements View.OnTouchListe
                 .build();
         networkService = retrofit.create(NetworkService.class);
 
-        HashMap<String, Object> input = new HashMap<>();
-        input.put("user_id", 1);
+        if(userList.size() != 0) {
+            HashMap<String, Object> input = new HashMap<>();
+            input.put("user_id", userList.get(0).getUser_id());
 
-        Call<StepResult> comment = networkService.postSearchStep(input);
-        comment.enqueue(new Callback<StepResult>() {
-            @Override
-            public void onResponse(Call<StepResult> call, Response<StepResult> response) {
-                if(response.isSuccessful()){
-                    if(response.body().getStatus().equals("Success")){
-                        if(response.body().getMsg().equals("Empty data")){
-                            recyclerView.setAdapter(null);
+            Call<StepResult> comment = networkService.postSearchStep(input);
+            comment.enqueue(new Callback<StepResult>() {
+                @Override
+                public void onResponse(Call<StepResult> call, Response<StepResult> response) {
+                    if (response.isSuccessful()) {
+                        if (response.body().getStatus().equals("Success")) {
+                            if (response.body().getMsg().equals("Empty data")) {
+                                recyclerView.setAdapter(null);
 
-                            recyclerView.setLayoutManager(layoutManager);
-                            Toast.makeText(StepActivity.this, "표시할 데이터가 없습니다.", Toast.LENGTH_SHORT).show();
-                        }else{
-                            Log.v("Count", String.valueOf(response.body().getData().size()));
+                                recyclerView.setLayoutManager(layoutManager);
+                                Toast.makeText(StepActivity.this, "표시할 데이터가 없습니다.", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Log.v("Count", String.valueOf(response.body().getData().size()));
 
-                            int arr_vol = response.body().getData().size();
+                                int arr_vol = response.body().getData().size();
 
-                            StepResult stepResult = response.body();
-                            StepResult.StepData[] stepData = new StepResult.StepData[arr_vol];
+                                StepResult stepResult = response.body();
+                                StepResult.StepData[] stepData = new StepResult.StepData[arr_vol];
 
-                            stepResult.copy(stepData, arr_vol);
+                                stepResult.copy(stepData, arr_vol);
 
-                            PamperData[] dataArr = new PamperData[arr_vol];
+                                PamperData[] dataArr = new PamperData[arr_vol];
 
-                            for(int i = 0; i < arr_vol; i++){
-                                PamperData sample = new PamperData(stepData[i].getStep_date().substring(5, 7), stepData[i].getStep_date().substring(8, 10), stepData[i].getStep_vol());
-                                dataArr[i] = sample;
+                                for (int i = 0; i < arr_vol; i++) {
+                                    PamperData sample = new PamperData(stepData[i].getStep_date().substring(5, 7), stepData[i].getStep_date().substring(8, 10), stepData[i].getStep_vol());
+                                    dataArr[i] = sample;
+                                }
+
+                                // 어댑터 할당, 어댑터는 기본 어댑터를 확장한 커스텀 어댑터를 사용할 것이다.
+                                adapter = new StepAdapter(dataArr, StepActivity.this);
+                                recyclerView.setAdapter(adapter);
+
+                                recyclerView.setLayoutManager(layoutManager);
                             }
-
-                            // 어댑터 할당, 어댑터는 기본 어댑터를 확장한 커스텀 어댑터를 사용할 것이다.
-                            adapter = new StepAdapter(dataArr, StepActivity.this);
-                            recyclerView.setAdapter(adapter);
-
-                            recyclerView.setLayoutManager(layoutManager);
+                        } else {
+                            Toast.makeText(StepActivity.this, "Failure", Toast.LENGTH_SHORT).show();
                         }
-                    }else{
-                        Toast.makeText(StepActivity.this, "Failure", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(StepActivity.this, "통신 실패", Toast.LENGTH_SHORT).show();
                     }
-                } else{
-                    Toast.makeText(StepActivity.this, "통신 실패", Toast.LENGTH_SHORT).show();
                 }
-            }
 
-            @Override
-            public void onFailure(Call<StepResult> call, Throwable t) {
-                Toast.makeText(StepActivity.this, "네트워크가 원할하지 않습니다.", Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<StepResult> call, Throwable t) {
+                    Toast.makeText(StepActivity.this, "네트워크가 원할하지 않습니다.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }else{
+            Toast.makeText(StepActivity.this, "Failed : DB error", Toast.LENGTH_SHORT).show();
+        }
     }
 
     float oldYvalue;
@@ -264,5 +277,17 @@ public class StepActivity extends AppCompatActivity implements View.OnTouchListe
         stepMinite.setText(new DecimalFormat("#.#").format(minite));
         stepDistance.setText(new DecimalFormat("#.##").format(distance));
         stepCalorie.setText(new DecimalFormat("#.#").format(calorie));
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mRealm.removeAllChangeListeners();
+        mRealm.close();
+    }
+
+    private RealmResults<UserVO> getUserList(){
+        return mRealm.where(UserVO.class).findAll();
     }
 }

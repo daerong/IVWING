@@ -46,6 +46,9 @@ public class LoginActivity extends AppCompatActivity {
         Realm.init(this);
         mRealm = Realm.getDefaultInstance();
 
+        RealmResults<UserVO> userList = getUserList();
+        Log.i(TAG, ">>>>>   userList.size :  " + userList.size());
+
         retrofit = new Retrofit.Builder()
                 .baseUrl(NetworkService.API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -54,6 +57,10 @@ public class LoginActivity extends AppCompatActivity {
 
         login_email = findViewById(R.id.login_email);
         login_pwd = findViewById(R.id.login_pwd);
+
+        if(userList.size() != 0){
+            login_email.setText(userList.get(0).getUser_email());
+        }
 
         login_action = (Button)findViewById(R.id.login_btn);
         login_action.setOnClickListener(new Button.OnClickListener() {
@@ -91,13 +98,12 @@ public class LoginActivity extends AppCompatActivity {
                     if(response.isSuccessful()){
                         if(response.body().getStatus().equals("Success")){
 
+                            deleteUserData();
+
                             LoginResult loginResult = response.body();
                             LoginResult.LoginData loginData = loginResult.getData();
 
                             insertUserData(loginData.getUser_id(), loginData.getUser_name(), loginData.getUser_email(), loginData.getUser_phone(), loginData.getUser_age(), loginData.getUser_gender(), loginData.getUser_stat(),loginData.getUser_room(), loginData.getUser_linker());
-
-                            RealmResults<UserVO> userList = getUserList();
-                            Log.i(TAG, ">>>>>   userList.size :  " + userList.size()); // :0
 
                             startActivity(new Intent(getApplication(), Splash2Activity.class)); //로딩이 끝난 후, ChoiceFunction 이동
                             LoginActivity.this.finish(); // 로딩페이지 Activity stack에서 제거
@@ -132,6 +138,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mRealm.removeAllChangeListeners();
         mRealm.close();
     }
 
@@ -151,6 +158,15 @@ public class LoginActivity extends AppCompatActivity {
         user.setUser_stat(String.valueOf(user_stat));
         user.setUser_room(user_room);
         user.setUser_linker(user_linker);
+        mRealm.commitTransaction();
+    }
+
+    private void deleteUserData(){
+
+        mRealm.beginTransaction();
+
+        RealmResults<UserVO> userList = mRealm.where(UserVO.class).findAll();
+        userList.deleteAllFromRealm();
         mRealm.commitTransaction();
     }
 }

@@ -16,6 +16,7 @@ import com.example.ivwing.Adapter.PlanAdapter;
 import com.example.ivwing.Adapter.StepAdapter;
 import com.example.ivwing.Data.LoginResult;
 import com.example.ivwing.Data.PlanResult;
+import com.example.ivwing.InnerDB.UserVO;
 import com.example.ivwing.Network.NetworkService;
 import com.example.ivwing.R;
 import com.example.ivwing.Data.ScheduleData;
@@ -29,6 +30,8 @@ import java.util.List;
 
 import devs.mulham.horizontalcalendar.HorizontalCalendar;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
+import io.realm.Realm;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,6 +39,9 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CalendarActivity extends AppCompatActivity {
+    private static final String TAG = CalendarActivity.class.getSimpleName();
+    private Realm mRealm;
+
     ImageView backButton;
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
@@ -49,6 +55,9 @@ public class CalendarActivity extends AppCompatActivity {
         /* starts before 1 month from now */
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
+
+        Realm.init(this);
+        mRealm = Realm.getDefaultInstance();
 
         recyclerView = findViewById(R.id.plan_recyclerView);
         // 리사이클러뷰의 notify()처럼 데이터가 변했을 때 성능을 높일 때 사용한다.
@@ -101,6 +110,9 @@ public class CalendarActivity extends AppCompatActivity {
 
 //                Toast.makeText(CalendarActivity.this, year+"/"+mon+"/"+day+" "+hour+":"+min+":"+sec, Toast.LENGTH_SHORT).show();
 
+                RealmResults<UserVO> userList = getUserList();
+                Log.i(TAG, ">>>>>   userList.size :  " + userList.size());
+
                 HashMap<String, Object> input = new HashMap<>();
                 input.put("year", year);
                 input.put("mon", mon);
@@ -108,6 +120,7 @@ public class CalendarActivity extends AppCompatActivity {
                 input.put("hour", hour);
                 input.put("min", min);
                 input.put("sec", sec);
+                input.put("user_id", userList.get(0).getUser_id());
 
                 Call<PlanResult> comment = networkService.postSearchPlan(input);
                 comment.enqueue(new Callback<PlanResult>() {
@@ -164,7 +177,16 @@ public class CalendarActivity extends AppCompatActivity {
                 });
             }
         });
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mRealm.removeAllChangeListeners();
+        mRealm.close();
+    }
 
+    private RealmResults<UserVO> getUserList(){
+        return mRealm.where(UserVO.class).findAll();
     }
 }
