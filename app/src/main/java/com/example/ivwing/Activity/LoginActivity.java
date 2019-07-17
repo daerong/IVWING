@@ -1,8 +1,8 @@
 package com.example.ivwing.Activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -11,13 +11,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ivwing.Data.LoginResult;
+import com.example.ivwing.InnerDB.UserVO;
 import com.example.ivwing.Network.NetworkService;
 import com.example.ivwing.R;
 
-import java.io.IOException;
 import java.util.HashMap;
 
-import okhttp3.ResponseBody;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -25,6 +27,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
+    private static final String TAG = LoginActivity.class.getSimpleName();
+    private Realm mRealm;
 
     Button login_action;
     TextView signup_action;
@@ -38,6 +42,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        Realm.init(this);
+        mRealm = Realm.getDefaultInstance();
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(NetworkService.API_URL)
@@ -80,9 +87,18 @@ public class LoginActivity extends AppCompatActivity {
             comment.enqueue(new Callback<LoginResult>() {
                 @Override
                 public void onResponse(Call<LoginResult> call, Response<LoginResult> response) {
-                    Log.v("Test", response.body().toString());
+//                    Log.v("Test", response.body().toString());
                     if(response.isSuccessful()){
                         if(response.body().getStatus().equals("Success")){
+
+                            LoginResult loginResult = response.body();
+                            LoginResult.LoginData loginData = loginResult.getData();
+
+                            insertUserData(loginData.getUser_id(), loginData.getUser_name(), loginData.getUser_email(), loginData.getUser_phone(), loginData.getUser_age(), loginData.getUser_gender(), loginData.getUser_stat(),loginData.getUser_room(), loginData.getUser_linker());
+
+                            RealmResults<UserVO> userList = getUserList();
+                            Log.i(TAG, ">>>>>   userList.size :  " + userList.size()); // :0
+
                             startActivity(new Intent(getApplication(), Splash2Activity.class)); //로딩이 끝난 후, ChoiceFunction 이동
                             LoginActivity.this.finish(); // 로딩페이지 Activity stack에서 제거
                             Toast.makeText(LoginActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
@@ -111,5 +127,30 @@ public class LoginActivity extends AppCompatActivity {
 //                LoginActivity.this.finish(); // 로딩페이지 Activity stack에서 제거
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mRealm.close();
+    }
+
+    private RealmResults<UserVO> getUserList(){
+        return mRealm.where(UserVO.class).findAll();
+    }
+
+    private void insertUserData(int user_id, String user_name, String user_email, String user_phone, int user_age, char user_gender, char user_stat, int user_room, int user_linker){
+        mRealm.beginTransaction();
+        UserVO user = mRealm.createObject(UserVO.class);
+        user.setUser_id(user_id);
+        user.setUser_name(user_name);
+        user.setUser_email(user_email);
+        user.setUser_phone(user_phone);
+        user.setUser_age(user_age);
+        user.setUser_gender(String.valueOf(user_gender));
+        user.setUser_stat(String.valueOf(user_stat));
+        user.setUser_room(user_room);
+        user.setUser_linker(user_linker);
+        mRealm.commitTransaction();
     }
 }

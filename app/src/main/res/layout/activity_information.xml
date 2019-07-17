@@ -35,4 +35,45 @@
         android:layout_height="wrap_content"
         app:layoutManager="LinearLayoutManager"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="40dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="위생 확인 사항"
+            android:textColor="#1B7CBE"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="수액 위생 관련 사고 예방을 위해 아래의 가이드라인을 보고, 꼭 수액을 확인하도록 하세요."
+            android:textColor="#6A6A6A"
+            android:textSize="12sp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1. 수액 하단에 쓰여 있는 사용기한 확인"
+            android:textColor="#6A6A6A"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2. 수액 내 이물질 유무 확인"
+            android:textColor="#6A6A6A"
+            android:textSize="12sp"/>
+
+    </LinearLayout>
+
 </LinearLayout>
