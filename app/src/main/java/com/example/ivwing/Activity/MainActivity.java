@@ -1,6 +1,10 @@
 package com.example.ivwing.Activity;
 
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
+import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,15 +17,21 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ivwing.InnerDB.StepVO;
 import com.example.ivwing.InnerDB.UserVO;
 import com.example.ivwing.R;
+import com.example.ivwing.Service.StepService;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private Realm mRealm;
+    private Realm mStepRealm;
+
+    public static Context targetContext;
 
     //슬라이드 열기/닫기 플래그
     boolean isPageOpen = false;
@@ -40,12 +50,14 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout step_action;
 
     Button logout_action;
+    Button service_action;
 
     TextView user_name;
     TextView user_stat;
     TextView user_email;
     TextView user_phone;
     TextView user_linker;
+    TextView step_volume;
 
 
     @Override
@@ -54,16 +66,25 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Realm.init(this);
+        RealmConfiguration config = new RealmConfiguration.Builder()
+                .name("stepRealm.realm")
+                .build();
+        // Use the config
+        mStepRealm = Realm.getInstance(config);
         mRealm = Realm.getDefaultInstance();
 
-        RealmResults<UserVO> userList = getUserList();
+        final RealmResults<UserVO> userList = getUserList();
         Log.i(TAG, ">>>>>   userList.size :  " + userList.size());
+        RealmResults<StepVO> stepList = getStepList(userList.get(0).getUser_id());
+        Log.i(TAG, ">>>>>   stepList.size :  " + stepList.size());
 
         user_name = findViewById(R.id.user_name);
         user_stat = findViewById(R.id.user_stat);
         user_email = findViewById(R.id.user_email);
         user_phone = findViewById(R.id.user_phone);
         user_linker = findViewById(R.id.user_linker);
+        step_volume = findViewById(R.id.step_volume);
+        targetContext = this;
 
         if(userList.size() != 0){
             user_name.setText(userList.get(0).getUser_name() + "(" + userList.get(0).getUser_age() + ") 님");
@@ -93,7 +114,13 @@ public class MainActivity extends AppCompatActivity {
                 user_linker.setText("링거대 : " + userList.get(0).getUser_linker() + "번 사용중");
             }
         }else{
-            Toast.makeText(MainActivity.this, "Failed : DB error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Failed : user DB error", Toast.LENGTH_SHORT).show();
+        }
+
+        if(stepList.size() != 0){
+            step_volume.setText("걸음수 : " + stepList.get(0).getStep_vol());
+        }else{
+            Log.e(TAG, ">>>>>   Error : Can't get array list");
         }
 
         //UI
@@ -152,6 +179,40 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        service_action = findViewById(R.id.service_btn);
+        if(isServiceRunning()){
+            service_action.setBackgroundResource(R.drawable.button_record_round4);
+            service_action.setText("걸음수 측정 종료");
+        }else{
+            service_action.setBackgroundResource(R.drawable.button_logout_round4);
+            service_action.setText("걸음수 측정 시작");
+        }
+        service_action.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, StepService.class).putExtra("user_id", userList.get(0).getUser_id());
+                if(isServiceRunning()){
+                    stopService(intent);
+                    Toast.makeText(MainActivity.this, "걸음수 측정 종료", Toast.LENGTH_SHORT).show();
+                }else{
+                    Log.i(TAG, ">>>>>  userId : " + userList.get(0).getUser_id());
+                    startService(intent);
+                    Toast.makeText(MainActivity.this, "걸음수 측정 시작", Toast.LENGTH_SHORT).show();
+                }
+                if(isServiceRunning()){
+                    service_action.setBackgroundResource(R.drawable.button_record_round4);
+                    service_action.setText("걸음수 측정 종료");
+                }else{
+                    service_action.setBackgroundResource(R.drawable.button_logout_round4);
+                    service_action.setText("걸음수 측정 시작");
+                }
+            }
+        });
+    }
+
+    public void stepDataUpdate(int user_id) {
+        RealmResults<StepVO> stepList = getStepList(user_id);
+        step_volume.setText("걸음수 : " + stepList.get(0).getStep_vol());
     }
 
     //버튼
@@ -209,5 +270,32 @@ public class MainActivity extends AppCompatActivity {
 
     private RealmResults<UserVO> getUserList(){
         return mRealm.where(UserVO.class).findAll();
+    }
+
+    private RealmResults<StepVO> getStepList(int user_id){
+        if(mStepRealm.where(StepVO.class).equalTo("step_user", user_id).findAll().size() == 0){
+            initStepData(user_id);
+            return mStepRealm.where(StepVO.class).equalTo("step_user", user_id).findAll();
+        }
+        return mStepRealm.where(StepVO.class).equalTo("step_user", user_id).findAll();
+    }
+
+    private void initStepData(int user_id){
+        mStepRealm.beginTransaction();
+        StepVO step = mStepRealm.createObject(StepVO.class);
+        step.setStep_user(user_id);
+        step.setStep_vol(0);
+        mStepRealm.commitTransaction();
+    }
+
+    public boolean isServiceRunning() {
+        ActivityManager manager = (ActivityManager) this.getSystemService(Context.ACTIVITY_SERVICE);
+
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE))
+        {
+            if (StepService.class.getName().equals(service.service.getClassName()))
+                return true;
+        }
+        return false;
     }
 }

@@ -282,7 +282,29 @@
                     android:textColor="#FFFFFF"
                     android:layout_marginBottom="10dp"/>
 
+                <TextView
+                    android:id="@+id/step_volume"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="걸음수 : "
+                    android:textSize="10sp"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginBottom="10dp"/>
+
             </LinearLayout>
+
+            <Button
+                android:id="@+id/service_btn"
+                android:layout_width="152dp"
+                android:layout_height="32dp"
+                android:text="걸음수 측정 종료"
+                android:textColor="#008AFF"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/button_record_round4"
+                android:layout_above="@+id/logout_btn"
+                android:layout_marginBottom="10dp"/>
 
             <Button
                 android:id="@+id/logout_btn"

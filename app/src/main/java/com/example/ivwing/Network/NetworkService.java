@@ -38,6 +38,14 @@ public interface NetworkService {
     @POST("step/search")
     Call<StepResult> postSearchStep(@FieldMap HashMap<String, Object> param);
 
+    @FormUrlEncoded
+    @POST("step/update")
+    Call<StepResult> postUpdateStep(@FieldMap HashMap<String, Object> param);
+
+    @FormUrlEncoded
+    @POST("step/today")
+    Call<StepResult> postTodayStep(@FieldMap HashMap<String, Object> param);
+
 //    @POST("user/signup")
 //    Call<ResponseBody> postSignup(@Body JsonObject jsonObject);
     //    Call<ResponseBody> postSignup(@Query("user_name") String name, @Query("user_email") String email, @Query("user_pwd") String pwd, @Query("user_phone") String phone, @Query("user_age") int age, @Query("user_gender") char gender);
