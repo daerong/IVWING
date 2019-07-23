@@ -70,11 +70,11 @@
                         android:layout_marginTop="8dp"/>
                 </LinearLayout>
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:gravity="right|center_vertical"
+                    android:gravity="right"
                     android:layout_alignParentBottom="true">
 
                     <TextView
@@ -82,9 +82,11 @@
                         android:layout_height="wrap_content"
                         android:text="목표걸음"
                         android:textSize="10sp"
+                        android:layout_toLeftOf="@+id/spinner_field"
                         android:textColor="#2699FB"
                         android:textStyle="bold"
-                        android:layout_marginEnd="8dp"/>
+                        android:layout_marginEnd="8dp"
+                        android:layout_centerVertical="true"/>
 
                     <Spinner
                         android:id="@+id/spinner_field"
@@ -92,9 +94,18 @@
                         android:layout_height="24dp"
                         android:spinnerMode="dropdown"
                         android:background="@drawable/spiner_step_btn"
-                        android:textColor="#707070"/>
+                        android:textColor="#707070"
+                        android:layout_alignParentRight="true"/>
 
-                </LinearLayout>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/dropdown_icon"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:paddingRight="7dp"/>
+
+                </RelativeLayout>
             </RelativeLayout>
 
             <RelativeLayout
@@ -117,7 +128,6 @@
 
             </RelativeLayout>
         </LinearLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="168dp"
@@ -156,10 +166,11 @@
                             android:layout_marginTop="8dp"/>
                     </LinearLayout>
                 </RelativeLayout>
-                <View
+                <ImageView
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:background="#C2C2C2"/>
+                    android:src="@drawable/drawable_dot_line_vertical"
+                    android:layerType="software" />
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="84dp"
@@ -199,10 +210,11 @@
                     </LinearLayout>
                 </RelativeLayout>
             </LinearLayout>
-            <View
+            <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#C2C2C2"/>
+                android:layout_height="2dp"
+                android:src="@drawable/drawable_dot_line_horizon"
+                android:layerType="software" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -247,10 +259,11 @@
                             android:layout_marginTop="8dp"/>
                     </LinearLayout>
                 </RelativeLayout>
-                <View
+                <ImageView
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:background="#C2C2C2"/>
+                    android:src="@drawable/drawable_dot_line_vertical"
+                    android:layerType="software" />
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="84dp"
