@@ -19,31 +19,31 @@ public interface NetworkService {
 
     //통신 담당 메소드 구현.
     @FormUrlEncoded
-    @POST("user/signup")
+    @POST("m/user/signup")
     Call<SigninResult> postSignup(@FieldMap HashMap<String, Object> param);
 
     @FormUrlEncoded
-    @POST("user/login")
+    @POST("m/user/login")
     Call<LoginResult> postLogin(@FieldMap HashMap<String, Object> param);
 
     @FormUrlEncoded
-    @POST("plan/search")
+    @POST("m/plan/search")
     Call<PlanResult> postSearchPlan(@FieldMap HashMap<String, Object> param);
 
     @FormUrlEncoded
-    @POST("record/search")
+    @POST("m/record/search")
     Call<RecordResult> postSearchRecord(@FieldMap HashMap<String, Integer> param);
 
     @FormUrlEncoded
-    @POST("step/search")
+    @POST("m/step/search")
     Call<StepResult> postSearchStep(@FieldMap HashMap<String, Object> param);
 
     @FormUrlEncoded
-    @POST("step/update")
+    @POST("m/step/update")
     Call<StepResult> postUpdateStep(@FieldMap HashMap<String, Object> param);
 
     @FormUrlEncoded
-    @POST("step/today")
+    @POST("m/step/today")
     Call<StepResult> postTodayStep(@FieldMap HashMap<String, Object> param);
 
 //    @POST("user/signup")

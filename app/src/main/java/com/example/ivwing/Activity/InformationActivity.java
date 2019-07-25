@@ -128,6 +128,8 @@ public class InformationActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<RecordResult> call, Throwable t) {
                     Toast.makeText(InformationActivity.this, "네트워크가 원할하지 않습니다.", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "Network : Retrofit Exception -> " + ((t != null && t.getMessage() != null) ? t.getMessage() : "---"));
+                    Log.d(TAG, "Network : Avs Exception -> " + ((t != null && t.getMessage() != null) ? t.getMessage() : "---"));
                 }
             });
         }else{
