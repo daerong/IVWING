@@ -22,6 +22,8 @@ import com.example.ivwing.InnerDB.UserVO;
 import com.example.ivwing.R;
 import com.example.ivwing.Service.StepService;
 
+import java.util.Calendar;
+
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
@@ -62,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        int initStep;
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -75,7 +79,20 @@ public class MainActivity extends AppCompatActivity {
 
         final RealmResults<UserVO> userList = getUserList();
         Log.i(TAG, ">>>>>   userList.size :  " + userList.size());
+
+        Calendar mCalendar = Calendar.getInstance( );
+
         RealmResults<StepVO> stepList = getStepList(userList.get(0).getUser_id());
+        if(stepList.size() != 0){
+            if(stepList.get(0).getStep_day() != mCalendar.get(Calendar.DAY_OF_MONTH)){
+                deleteStepData(userList.get(0).getUser_id());
+                stepList = getStepList(userList.get(0).getUser_id());
+            }
+        }else{
+            stepList = getStepList(userList.get(0).getUser_id());
+        }
+        initStep = stepList.get(0).getStep_vol();
+
         Log.i(TAG, ">>>>>   stepList.size :  " + stepList.size());
 
         user_name = findViewById(R.id.user_name);
@@ -98,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 }
                 case "I" : {
-                    user_stat.setText("상태 : " + userList.get(0).getUser_room() + "호에 입원중");
+                    user_stat.setText("병실호수 : " + userList.get(0).getUser_room() + "호");
                     break;
                 }
                 default : {
@@ -111,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
             if(userList.get(0).getUser_linker() == 0){
                 user_linker.setText("링거대 : 사용중이 아님");
             }else{
-                user_linker.setText("링거대 : " + userList.get(0).getUser_linker() + "번 사용중");
+                user_linker.setText("링거대 : " + userList.get(0).getUser_linker() + "번");
             }
         }else{
             Toast.makeText(MainActivity.this, "Failed : user DB error", Toast.LENGTH_SHORT).show();
@@ -174,8 +191,12 @@ public class MainActivity extends AppCompatActivity {
         logout_action.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplication(), LoginActivity.class)); //로딩이 끝난 후, ChoiceFunction 이동
-                MainActivity.this.finish(); // 로딩페이지 Activity stack에서 제거
+                if(isPageOpen) {
+                    startActivity(new Intent(getApplication(), LoginActivity.class)); //로딩이 끝난 후, ChoiceFunction 이동
+                    MainActivity.this.finish(); // 로딩페이지 Activity stack에서 제거
+                }else{
+                    startActivity(new Intent(getApplication(), StepActivity.class));
+                }
             }
         });
 
@@ -190,21 +211,28 @@ public class MainActivity extends AppCompatActivity {
         service_action.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, StepService.class).putExtra("user_id", userList.get(0).getUser_id());
-                if(isServiceRunning()){
-                    stopService(intent);
-                    Toast.makeText(MainActivity.this, "걸음수 측정 종료", Toast.LENGTH_SHORT).show();
+                if(isPageOpen) {
+                    String str = step_volume.getText().toString();
+                    str = str.replaceAll("[^0-9]", "");
+
+                    Intent intent = new Intent(MainActivity.this, StepService.class).putExtra("user_id", userList.get(0).getUser_id()).putExtra("user_step", Integer.valueOf(str));
+                    if(isServiceRunning()){
+                        stopService(intent);
+                        Toast.makeText(MainActivity.this, "걸음수 측정 종료", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Log.i(TAG, ">>>>>  userId : " + userList.get(0).getUser_id());
+                        startService(intent);
+                        Toast.makeText(MainActivity.this, "걸음수 측정 시작", Toast.LENGTH_SHORT).show();
+                    }
+                    if(isServiceRunning()){
+                        service_action.setBackgroundResource(R.drawable.button_record_round4);
+                        service_action.setText("걸음수 측정 종료");
+                    }else{
+                        service_action.setBackgroundResource(R.drawable.button_logout_round4);
+                        service_action.setText("걸음수 측정 시작");
+                    }
                 }else{
-                    Log.i(TAG, ">>>>>  userId : " + userList.get(0).getUser_id());
-                    startService(intent);
-                    Toast.makeText(MainActivity.this, "걸음수 측정 시작", Toast.LENGTH_SHORT).show();
-                }
-                if(isServiceRunning()){
-                    service_action.setBackgroundResource(R.drawable.button_record_round4);
-                    service_action.setText("걸음수 측정 종료");
-                }else{
-                    service_action.setBackgroundResource(R.drawable.button_logout_round4);
-                    service_action.setText("걸음수 측정 시작");
+                    startActivity(new Intent(getApplication(), StepActivity.class));
                 }
             }
         });
@@ -241,9 +269,11 @@ public class MainActivity extends AppCompatActivity {
         public void onAnimationEnd(Animation animation) {
             //슬라이드 열기->닫기
             if(isPageOpen){
-                toggle_icon_off.setVisibility(View.INVISIBLE);
-                slidingPage.setVisibility(View.INVISIBLE);
+                toggle_icon_off.setVisibility(View.GONE);
+                slidingPage.setVisibility(View.GONE);
                 isPageOpen = false;
+
+                ((MainActivity)(MainActivity.targetContext)).onResume();
             }
             //슬라이드 닫기->열기
             else{
@@ -273,18 +303,45 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private RealmResults<StepVO> getStepList(int user_id){
+        Log.i(TAG, ">>>>>   StepVO vol : " + mStepRealm.where(StepVO.class).equalTo("step_user", user_id).findAll().size());
+        Calendar mCalendar = Calendar.getInstance( );
+
+        RealmResults<StepVO> returnStepVo;
+
         if(mStepRealm.where(StepVO.class).equalTo("step_user", user_id).findAll().size() == 0){
             initStepData(user_id);
-            return mStepRealm.where(StepVO.class).equalTo("step_user", user_id).findAll();
+            returnStepVo = mStepRealm.where(StepVO.class).equalTo("step_user", user_id).findAll();
+        }else{
+            if(mStepRealm.where(StepVO.class).equalTo("step_user", user_id).equalTo("step_day", mCalendar.get(Calendar.DAY_OF_MONTH)).findAll().size() == 0){
+                deleteStepData(user_id);
+                initStepData(user_id);
+                returnStepVo =  mStepRealm.where(StepVO.class).equalTo("step_user", user_id).findAll();
+            } else{
+                returnStepVo =  mStepRealm.where(StepVO.class).equalTo("step_user", user_id).findAll();
+//                // 수치 높게 바꾸기
+//                mStepRealm.beginTransaction();
+//                returnStepVo.get(0).setStep_vol(2503);
+//                mStepRealm.commitTransaction();
+                // 수치 높게 바꾸기
+            }
         }
-        return mStepRealm.where(StepVO.class).equalTo("step_user", user_id).findAll();
+        return returnStepVo;
     }
 
     private void initStepData(int user_id){
+        Calendar mCalendar = Calendar.getInstance( );
         mStepRealm.beginTransaction();
         StepVO step = mStepRealm.createObject(StepVO.class);
         step.setStep_user(user_id);
         step.setStep_vol(0);
+        step.setStep_day(mCalendar.get(Calendar.DAY_OF_MONTH));
+        mStepRealm.commitTransaction();
+    }
+
+    private void deleteStepData(int user_id){
+        mStepRealm.beginTransaction();
+        RealmResults<StepVO> stepList = mStepRealm.where(StepVO.class).equalTo("step_user", user_id).findAll();
+        stepList.deleteAllFromRealm();
         mStepRealm.commitTransaction();
     }
 

@@ -42,7 +42,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="#2699FB"
-                            android:text="8℃"
+                            android:text="23℃"
                             android:textSize="28sp"
                             android:layout_marginStart="16dp"
                             android:textStyle="bold"/>
@@ -54,7 +54,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
                         android:textStyle="bold"
-                        android:text="24℃/9℃ 체감온도 8℃"/>
+                        android:text="24℃/14℃ 체감온도 25℃"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -66,7 +66,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="12sp"
-                            android:text="미세먼지: 보통(36) / 초미세먼지: 보통(17)"/>
+                            android:text="미세먼지: 좋음(28) / 초미세먼지: 좋음(13)"/>
 
                     </LinearLayout>
 
@@ -171,7 +171,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="42dp"
-            android:src="@drawable/icon_menu"/>
+            android:src="@drawable/ic_icon_menu2"/>
 
     </RelativeLayout>
 
@@ -239,18 +239,10 @@
                 android:layout_marginTop="16dp">
 
                 <TextView
-                    android:id="@+id/user_stat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="상태 : "
-                    android:textSize="10sp"
-                    android:textColor="#FFFFFF"
-                    android:layout_marginBottom="10dp"/>
-
-                <TextView
                     android:id="@+id/user_email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:text="이메일 : "
                     android:textSize="10sp"
                     android:textColor="#FFFFFF"
@@ -260,16 +252,18 @@
                     android:id="@+id/user_phone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:text="연락처 : "
                     android:textSize="10sp"
                     android:textColor="#FFFFFF"
                     android:layout_marginBottom="10dp"/>
 
                 <TextView
-                    android:id="@+id/user_linker"
+                    android:id="@+id/step_volume"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="링거대 : "
+                    android:visibility="gone"
+                    android:text="걸음수 : "
                     android:textSize="10sp"
                     android:textColor="#FFFFFF"
                     android:layout_marginBottom="10dp"/>
@@ -283,10 +277,19 @@
                     android:layout_marginBottom="10dp"/>
 
                 <TextView
-                    android:id="@+id/step_volume"
+                    android:id="@+id/user_stat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="걸음수 : "
+                    android:text="병실호수 : "
+                    android:textSize="10sp"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginBottom="10dp"/>
+
+                <TextView
+                    android:id="@+id/user_linker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="링거대 : "
                     android:textSize="10sp"
                     android:textColor="#FFFFFF"
                     android:layout_marginBottom="10dp"/>

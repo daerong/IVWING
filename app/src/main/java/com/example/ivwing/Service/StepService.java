@@ -22,6 +22,7 @@ import com.example.ivwing.InnerDB.StepVO;
 import com.example.ivwing.Network.NetworkService;
 import com.example.ivwing.R;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
@@ -39,13 +40,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class StepService extends Service implements SensorEventListener {
     SensorManager m_sensor_manager;
     Sensor m_step_detect;
-    Sensor m_step_counter;
 
     private static final String TAG = StepService.class.getSimpleName();
     private Realm mStepRealm;
 
     int mStepDetector;
-    int mStepCounter;
 
     int userId;
 
@@ -59,10 +58,6 @@ public class StepService extends Service implements SensorEventListener {
     TimerTask updatePlz;
     Timer timer;
 
-    public StepService() {
-
-    }
-
     @Override public void onCreate() {
         super.onCreate();
 
@@ -72,10 +67,6 @@ public class StepService extends Service implements SensorEventListener {
         // SensorManager 를 이용해서 가속센서와 자기장 센서 객체를 얻는다.
         m_step_detect = m_sensor_manager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
         if(m_step_detect == null) {
-            Toast.makeText(this, "No Step Detect Sensor", Toast.LENGTH_SHORT).show();
-        }
-        m_step_counter = m_sensor_manager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-        if(m_step_counter == null) {
             Toast.makeText(this, "No Step Detect Sensor", Toast.LENGTH_SHORT).show();
         }
 
@@ -92,10 +83,7 @@ public class StepService extends Service implements SensorEventListener {
         // Use the config
         mStepRealm = Realm.getInstance(config);
 
-        RealmResults<StepVO> stepList = getStepList(userId);
-        mStepDetector = stepList.get(0).getStep_vol();
 
-        sendNotification();
         activity_manager = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
 
         updatePlz = new TimerTask() {
@@ -137,6 +125,8 @@ public class StepService extends Service implements SensorEventListener {
             }
         };
 
+        sendNotification();
+
         /////////// / Timer 생성 //////////////
         timer = new Timer();
         timer.schedule(updatePlz, 0, 20 * 1000);        // 20초
@@ -152,10 +142,16 @@ public class StepService extends Service implements SensorEventListener {
         }else{
             Log.e(TAG,"Error : Undefined user.");
         }
+        mStepDetector = intent.getIntExtra("user_step", 0);
+        Log.i(TAG, ">>>>>  onStartCommand mStepDetector : " + mStepDetector);
+        if (mStepDetector != 0) {
+            Log.i(TAG,"mStepDetector onStartCommand  : " + mStepDetector);
+        }else{
+            Log.e(TAG,"Error : Undefined step.");
+        }
 
         // 센서 값을 이 컨텍스트에서 받아볼 수 있도록 리스너를 등록한다.
         m_sensor_manager.registerListener(this, m_step_detect, SensorManager.SENSOR_DELAY_UI);
-        m_sensor_manager.registerListener(this, m_step_counter, SensorManager.SENSOR_DELAY_UI);
         return START_STICKY;
     }
 
@@ -173,8 +169,6 @@ public class StepService extends Service implements SensorEventListener {
                 if(isWorking()) ((MainActivity)MainActivity.targetContext).stepDataUpdate(userId);
                 updateNotification();
             }
-        }else if(event.sensor.getType() == Sensor.TYPE_STEP_COUNTER){
-            mStepCounter = (int)event.values[0];
         }
     }
 
@@ -193,18 +187,29 @@ public class StepService extends Service implements SensorEventListener {
     }
 
     private RealmResults<StepVO> getStepList(int user_id){
+        Log.i(TAG, ">>>>>   StepVO vol : " + mStepRealm.where(StepVO.class).equalTo("step_user", user_id).findAll().size());
+        Calendar mCalendar = Calendar.getInstance( );
+
         if(mStepRealm.where(StepVO.class).equalTo("step_user", user_id).findAll().size() == 0){
             initStepData(user_id);
             return mStepRealm.where(StepVO.class).equalTo("step_user", user_id).findAll();
+        }else{
+            if(mStepRealm.where(StepVO.class).equalTo("step_user", user_id).equalTo("step_day", mCalendar.get(Calendar.DAY_OF_MONTH)).findAll().size() == 0){
+                deleteStepData(user_id);
+                initStepData(user_id);
+                return mStepRealm.where(StepVO.class).equalTo("step_user", user_id).findAll();
+            }
         }
         return mStepRealm.where(StepVO.class).equalTo("step_user", user_id).findAll();
     }
 
     private void initStepData(int user_id){
+        Calendar mCalendar = Calendar.getInstance( );
         mStepRealm.beginTransaction();
         StepVO step = mStepRealm.createObject(StepVO.class);
         step.setStep_user(user_id);
         step.setStep_vol(0);
+        step.setStep_day(mCalendar.get(Calendar.DAY_OF_MONTH));
         mStepRealm.commitTransaction();
     }
 
@@ -216,10 +221,11 @@ public class StepService extends Service implements SensorEventListener {
     }
 
     public void updateStepData(int user_id, int new_vol){
+        Calendar mCalendar = Calendar.getInstance( );
         mStepRealm.beginTransaction(); //트랜잭션 시작
-        RealmResults<StepVO> stepList = mStepRealm.where(StepVO.class).equalTo("step_user", user_id).findAll();
+        RealmResults<StepVO> stepList = mStepRealm.where(StepVO.class).equalTo("step_user", user_id).equalTo("step_day", mCalendar.get(Calendar.DAY_OF_MONTH)).findAll();
         stepList.get(0).setStep_vol(new_vol);
-        Log.i(TAG, "stepVO  " + stepList.get(0).getStep_vol());
+        Log.i(TAG, "StepVO  " + stepList.get(0).getStep_vol());
         mStepRealm.commitTransaction(); //트랜잭션 종료 반영
     }
 
