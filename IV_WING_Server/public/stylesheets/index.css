@@ -1,0 +1,150 @@
+@import url(//fonts.googleapis.com/earlyaccess/nanumbrushscript.css);
+/*"Nanum Brush Script"*/
+@import url(//fonts.googleapis.com/earlyaccess/nanumgothic.css);
+/*"Nanum Gothic"*/
+
+a:link{ text-decoration:none; }
+a:visited{ text-decoration:none; }
+a:active{ text-decoration:none; }
+a:hover{ text-decoration:none; }
+
+/*배경옵션*/
+/*background-image:url(../img/background.jpg);*/
+/*background-repeat:no-repeat;*/
+/*background-attachment: fixed;*/
+body {
+    background: linear-gradient(241deg, #B8E3FF, #007BCE) no-repeat fixed;
+    width: 100%;
+    margin: auto;
+    font-family: 'Nanum Gothic', serif;
+    color: #313131;
+}
+#login_background {
+    display: table;
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+}
+#login_container {
+    display: table-cell;
+    vertical-align: middle;
+    overflow: auto;
+}
+#login_main_container{
+    width: 666px;
+    height: 554px;
+    border-radius: 39px;
+    /*border: 1px solid #707070;*/
+    -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+    background: rgba(255, 255, 255, 0.28);
+    text-align: center;
+    margin: auto;
+}
+#login_logo_box{
+    display: table;
+    overflow: auto;
+    width: 100%;
+    height : 264px;
+}
+#login_logo_box > .sample_text {
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 50px;
+}
+#login_form_box{
+    overflow: auto;
+    padding : 0 77px;
+}
+#login_form_box > .each_input {
+    position: relative;
+    overflow: auto;
+}
+#login_form_box > .each_input > input, #login_form_box > button {
+    text-align : left;
+    float : left;
+    height : 63px;
+    font-size : 28px;
+    margin-bottom : 12px;
+}
+#login_form_box > .each_input > input::placeholder { color: #ffffff; }           /* Chrome, Firefox, Opera, Safari 10.1+ */
+#login_form_box > .each_input > input:-ms-input-placeholder { color: #ffffff; }  /* Internet Explorer 10-11 */
+#login_form_box > .each_input > input::-ms-input-placeholder { color: #ffffff; } /* Microsoft Edge */
+#login_form_box > .each_input > input:focus { outline: none; }
+#login_form_box > .each_input > input {
+    width : 98%;
+    width : -webkit-calc(100% - 2px - 63px); /* for Chrome, Safari */
+    width :    -moz-calc(100% - 2px - 63px); /* for Firefox */
+    width :         calc(100% - 2px - 63px); /* for IE */
+    background: none;
+    border: 1px solid #ffffff;
+    border-radius: 12px;
+    padding-left: 63px;
+    color : #ffffff;
+}
+#login_form_box > button {
+    position: relative;
+    width: 100%;
+    background : #ffffff;
+    border: none;
+    border-radius: 12px;
+    color: #57B2EF;
+    cursor: pointer;
+    outline: none;
+    -moz-outline-style: none;
+    margin-top: 16px;
+}
+#login_form_box > button > p {
+    text-align: center;
+    line-height: 32px;
+    margin-block-start: 0em;
+    margin-block-end: 0em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+ }
+#login_form_box > .each_input > img {
+    position: absolute;
+}
+#login_sub_container{
+    width: 500px;
+    text-align: center;
+    margin: auto;
+    padding-top: 16px;
+}
+#login_sub_container > .login_option_box {
+    float: left;
+    width: 33.3%;
+    position: relative;
+    opacity: 0.7;
+}
+
+#login_sub_container > .login_option_box span {
+    color: #ffffff;
+    font-size: 16px;
+    line-height: 18px;
+}
+
+/*체크박스 디자인*/
+#login_sub_container > .login_option_box > input[type=checkbox] {
+    display: none;
+}
+input[type=checkbox] + label{
+    display: inline-block;
+    cursor: pointer;
+    position: relative;
+}
+#login_sub_container > .login_option_box > input[type=checkbox]+ label:before {
+    content: "";
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    left: 7px;
+    bottom: -3px;
+    background: none;
+    border: 1px solid #ffffff;
+}
+#login_sub_container > .login_option_box > input[type=checkbox]:checked + label:before {
+    /*content: "\2714";  !* 체크모양 *!*/
+    background-color:#ffffff;
+}
+/*체크박스 디자인*/

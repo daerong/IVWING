@@ -1,0 +1,260 @@
+<!doctype html>
+<html class="no-js" lang="ko">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>배터리 시간 순</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="../stylesheets/monitor.css">
+
+    <!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <!-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
+
+    <script src="../javascripts/monitor.js"></script>
+</head>
+
+<body>
+    <div id = "login_background">
+        <div id = "monitor_head">
+            <div id = "title_container">
+                <div class="title_box"><img src="../images/main_logo.png"></div>
+            </div>
+            <div id="category_background">
+                <div id="category_container">
+                    <a href='./new'><div class="category_box"><span>최신 순</span></div></a>
+                    <a href='./room'><div class="category_box"><span>호실 번호 순</span></div></a>
+                    <a href='./left'><div class="category_box"><span>남은 시간 순</span></div></a>
+                    <a href='./battery'><div class="category_box"><span id="category_on">남은 배터리 순</span></div></a>
+                    <div class="search_box">
+                        <div class="input_box">
+                            <input type="text" id="search_word" placeholder="Search"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id = "monitor_body">
+            <%emptyData.forEach(function(item){ %>
+            <div class="monitor_title">
+                <span>미지정</span>      
+            </div>
+            <div class= "monitor_container">
+
+                <div class= "monitor_component">
+                    <p class = "hidden_recordId"><%- item.record_id %></p>
+                    <p class = "hidden_recordGtt"><%- item.record_gtt %></p>
+                    <p class = "hidden_recordTime"><%- item.iv_time %></p>
+                    <p class = "hidden_ivId"><%- item.iv_id %></p>
+                    <p class = "hidden_ivPercent"><%- item.iv_percent %></p>
+                    <p class = "hidden_ivNow"><%- item.iv_now %></p>
+                    <p class = "hidden_ivMax"><%- item.iv_max %></p>
+                    <p class = "hidden_userId"><%- item.user_id %></p>
+                    <p class = "hidden_userRoom"><%- item.user_room %></p>
+                    <p class = "hidden_linkerId"><%- item.linker_id %></p>
+                    <p class = "hidden_linkerBattery"><%- item.linker_battery %></p>
+
+                    <div class="component_name_volume">
+                        <div class= "component_name">
+                            <span class="visible_userName"><%- item.linker_id + "-" + item.user_phone %></span>
+<!--                             <span>(</span>
+                            <span class="visible_userGender"><%- item.user_gender %></span>
+                            <span>, </span>
+                            <span class="visible_userRoom"><%- item.user_room %></span>
+                            <span>호)</span> -->
+                        </div>
+                        <div class= "component_volume">
+                            <% if(item.linker_battery <= 0){ %>
+                                <img src="../images/battery-0.png"/>
+                            <% }else if(item.linker_battery <= 10){ %>
+                                <img src="../images/battery-1.png"/>
+                            <% }else if(item.linker_battery <= 30){ %>
+                                <img src="../images/battery-2.png"/>
+                            <% }else if(item.linker_battery <= 50){ %>
+                                <img src="../images/battery-3.png"/>
+                            <% }else if(item.linker_battery <= 75){ %>
+                                <img src="../images/battery-4.png"/>
+                            <% }else if(item.linker_battery <= 100){ %>
+                                <img src="../images/battery-5.png"/>
+                            <%}%>
+                        </div>
+                    </div>
+                <% if(item.iv_name == null){ %>
+                    <div class="component_type">미지정</div>
+                <% }else { %>
+                    <div class="component_type"><%- item.iv_name %></div>
+                <%}%>
+                    <div class="component_graph">
+                          <div class="graph_border">
+                            <div class="graph_gauge">
+                                <div class="graph_text_gray">
+                                    <span><%- item.iv_now %></span>
+                                    <span style="padding:0;">/</span>
+                                    <span style="padding:0;"><%- item.iv_max %>(mL)</span>
+                                </div>
+                                <div class="graph_gauge_bar" style="width:<%- item.iv_percent %>%;">
+                                   <div class="graph_text"><span><%- item.iv_now %>/<%- item.iv_max %>(mL)</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="component_json">
+                        <div class="attribute">남은시간:</div>
+                        <div class="value"><%- ((item.iv_time-(item.iv_time%60))/60) %>시간 <%- item.iv_time%60 %>분</div>
+                    </div>
+                    <div class="component_json">
+                        <div class="attribute">투여속도:</div>
+                        <div class="value"><%- item.record_gtt %>gtt</div>
+                    </div>
+                </div>
+
+            </div>
+            <% }); %> 
+            <div class= "monitor_container">
+                <%recordData.forEach(function(item){ %>
+                <div class= "monitor_component">
+                    <p class = "hidden_recordId"><%- item.record_id %></p>
+                    <p class = "hidden_recordGtt"><%- item.record_gtt %></p>
+                    <p class = "hidden_recordTime"><%- item.iv_time %></p>
+                    <p class = "hidden_ivId"><%- item.iv_id %></p>
+                    <p class = "hidden_ivPercent"><%- item.iv_percent %></p>
+                    <p class = "hidden_ivNow"><%- item.iv_now %></p>
+                    <p class = "hidden_ivMax"><%- item.iv_max %></p>
+                    <p class = "hidden_userId"><%- item.user_id %></p>
+                    <p class = "hidden_userRoom"><%- item.user_room %></p>
+                    <p class = "hidden_linkerId"><%- item.linker_id %></p>
+                    <p class = "hidden_linkerBattery"><%- item.linker_battery %></p>
+
+                    <div class="component_name_volume">
+                        <div class= "component_name">
+                            <span class="visible_userName"><%- item.user_name %></span>
+     <!--                        <span>(</span>
+                            <span class="visible_userGender"><%- item.user_gender %></span>
+                            <span>, </span>
+                            <span class="visible_userRoom"><%- item.user_room %></span>
+                            <span>호)</span> -->
+                        </div>
+                        <div class= "component_volume">
+                            <% if(item.linker_battery <= 0){ %>
+                                <img src="../images/battery-0.png"/>
+                            <% }else if(item.linker_battery <= 10){ %>
+                                <img src="../images/battery-1.png"/>
+                            <% }else if(item.linker_battery <= 30){ %>
+                                <img src="../images/battery-2.png"/>
+                            <% }else if(item.linker_battery <= 50){ %>
+                                <img src="../images/battery-3.png"/>
+                            <% }else if(item.linker_battery <= 75){ %>
+                                <img src="../images/battery-4.png"/>
+                            <% }else if(item.linker_battery <= 100){ %>
+                                <img src="../images/battery-5.png"/>
+                            <%}%>
+                        </div>
+                    </div>
+                    <div class="component_type"><%- item.iv_name %></div>
+                    <div class="component_graph">
+                          <div class="graph_border">
+                            <div class="graph_gauge">
+                                <div class="graph_text_gray">
+                                    <span><%- item.iv_now %></span>
+                                    <span style="padding:0;">/</span>
+                                    <span style="padding:0;"><%- item.iv_max %>(mL)</span>
+                                </div>
+                                <div class="graph_gauge_bar" style="width:<%- item.iv_percent %>%;">
+                                   <div class="graph_text"><span><%- item.iv_now %>/<%- item.iv_max %>(mL)</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="component_json">
+                        <div class="attribute">남은시간:</div>
+                        <div class="value"><%- ((item.iv_time-(item.iv_time%60))/60) %>시간 <%- item.iv_time%60 %>분</div>
+                    </div>
+                    <div class="component_json">
+                        <div class="attribute">투여속도:</div>
+                        <div class="value"><%- item.record_gtt %>gtt</div>
+                    </div>
+                </div>
+                <% }); %> 
+            </div>
+        </div>
+    </div>
+    <div id="wrap_mask"></div>
+    <div id="popup_window">
+        <div class="popup_window_container">
+            <div class="popup_window_head">
+                <div class="title_box"><span>환자 정보 등록</span></div>
+            </div>
+            <div class="popup_window_body">
+                <div class="window_body_container">
+                    <p class = "hidden_userId">사용자 ID</p>
+                    <p class = "hidden_linkerId">링커 ID</p>
+                    <div class="each_box_json">
+                        <div class="attribute">환자이름:</div>
+                        <input type="text" id="sick_name" placeholder="환자이름"/>
+                    </div>
+                    <div class="each_box_json" style="margin-bottom: 20px;">
+                        <div class="attribute">병실위치:</div>
+                        <input type="text" id="sick_room" placeholder="병실위치"/>
+                    </div>
+                    <div id="escape_box"></div>
+                    <div id="repeat_area">
+                        <p class = "hidden_ivId">수액 ID</p>
+                        <div class="each_box_json">
+                            <div class="attribute">수액명칭:</div>
+                            <div class = "toggle_component">
+                                <div class = "toggle_main">
+                                    <div class = "left_area"><p class="target_ivId"></p><span>ㄴ이란ㅇ리ㅏㅈ</span></div>
+                                    <div class = "right_area"><p>▼</p></div>
+                                </div>
+                                <div class="toggle_box">
+                                    <div class="toggle_content">
+                                        <p class="toggle_hidden_now">1000</p>
+                                        <p class="toggle_hidden_max">1000</p>
+                                        <p class="toggle_hidden_id">1</p>
+                                        <span>수액 선택 옵션1</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="each_box_graph">
+                            <div class="attribute">남은수액:</div>
+                            <div class="graph_border">
+                                <div class="graph_gauge">
+                                    <div class="graph_text_gray"><span>900/1000(mL)</span></div>
+                                    <div class="graph_gauge_bar" style="width:100%;">
+                                       <div class="graph_text"><span>900/1000(mL)</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="each_box_json">
+                            <div class="attribute">남은시간:</div>
+                            <div class="value">1300분</div>
+                            <div class="boundary">/</div>
+                            <div class="attribute">투여속도:</div>
+                            <div class="value">8gtt</div>
+                        </div>
+                    </div>
+                    <div class="each_box_json">
+                        <div class="attribute">배터리:</div>
+                        <div id="battery_text" class="value"><span>99%</span></div>
+                        <img id="battery_big" src="../images/battery-big_4.png"/>
+                    </div>
+                    <div class="each_box_special">
+                        <div class="attribute">특이사항</div>
+                        <textarea id="remark" placeholder=""></textarea>
+                    </div>
+                    <div class = "button_area">
+                        <input type="button" class="white_btn" href="#" id="close" value="창닫기"/>
+                        <!--class=close는 닫기 기능, 확인에는 다른링크 걸어야함-->
+                        <input type="button" class="blue_btn" href="#" id="save" value="저장하기"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
