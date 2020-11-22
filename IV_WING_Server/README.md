@@ -1,4 +1,4 @@
-# IV_WING_Android
+# IV_WING_Server
 
-### 환자용 애플리케이션
+### 수액 모니터링 시스템
 :boy: Author: 유대성[(daerong)](https://github.com/daerong/)  
